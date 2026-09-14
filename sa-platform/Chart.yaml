@@ -1,0 +1,58 @@
+apiVersion: v2
+name: sa-platform
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+
+appVersion: "1.2.0"
+
+dependencies:
+  - name: nats
+    version: "2.14.5"
+    repository: "https://nats-io.github.io/k8s/helm/charts/"
+    condition: nats.enabled
+  - name: mongodb
+    alias: auditlogs-db
+    version: "19.1.36"
+    repository: "oci://registry-1.docker.io/bitnamicharts"
+    condition: auditlogs-db.enabled
+  - name: mongodb
+    alias: users-identity-db
+    version: "19.1.36"
+    repository: "oci://registry-1.docker.io/bitnamicharts"
+    condition: users-identity-db.enabled
+  - name: mongodb
+    alias: products-db
+    version: "19.1.36"
+    repository: "oci://registry-1.docker.io/bitnamicharts"
+    condition: products-db.enabled
+  - name: mongodb
+    alias: interactions-db
+    version: "19.1.36"
+    repository: "oci://registry-1.docker.io/bitnamicharts"
+    condition: interactions-db.enabled
+
+  - name: audit-logs
+    version: "0.1.0"
+    repository: "file://charts/audit-logs"
+    condition: audit-logs.enabled
+
+  - name: users-identity
+    version: "0.1.0"
+    repository: "file://charts/users-identity"
+    condition: users-identity.enabled
+
+  - name: api-gateway
+    version: "0.1.0"
+    repository: "file://charts/api-gateway"
+    condition: api-gateway.enabled
+
+  - name: products
+    version: "0.1.0"
+    repository: "file://charts/products"
+    condition: products.enabled
+
+  - name: interactions
+    version: "0.1.0"
+    repository: "file://charts/interactions"
+    condition: interactions.enabled

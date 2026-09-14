@@ -1,0 +1,15 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: sa-platform-audit-logs-db
+  namespace: sa-p5
+spec:
+  encryptedData:
+    mongodb-replica-set-key: AgBUm13hJJSG/9LLUmlabM0nxiJy6muYmY88ztObqH0pPHii7TXWQBGVBRuj+M1/54uWLMC8r+tdpDhhqpJLAndYLSDo9/AKCYzeUGNkmlgC0bk577/Km6k+kKRgGZYUaAK5AejKOTWf+HNuTJj8Hv76IbeY/89S1rBdHKjP6tz3allmWaEkrl+Sla1qYzxvCZ/AyPwtCTpmrktHR1KL/p2ZftJfNS+8iHnxYsKWxIG/nR+00K3W2n90HLQtcAoxt3uDQlzdNHivsQte6C7lu1I2CkC3CFXSvrjUVDM+T36zpxid1efuY0NEh5i/W4SOj+NzRg8LptU/qZJ7ZwIhL/1IDoR4tS75tvBJ10QWZ7FFrRzD5KXyFDGbgZDV77mZ4YsJ0oS8IYsGyZI9BQfldfwhH4253F1X28uan7GrYI57+/4fIqahaavaxHc8vGtk6rnyJE4lfRTPTBoLzogHqq8JX9KcesGlu+5sXus3upYP75nMeRFSYKAr/UFcR0BuQQ1Jt5LwkWkm8eEb1mhowd3D/F/epIm7B+ZEMCCmETGgOz03LG1ugkDVTco7Eld6YNbmvw4c8hXdNN3YWspJCzibm//8gH8/FQ1HkoOH3KXbziWE8wUeq9QDl2zdS0+Dq0WaI749wYXbAXpsBL2ur/diKF58SxXv0OjYh13hb+atHSgDLJohsPghQokWZ6jpGyL4i3QTS97sB0VLrlns
+    mongodb-root-password: AgAMcVZX48RDui9m3xu7B4CVhIkMbwOibqcrZ8UYrzox4+ZEjAlp9bmy3ipjSwmKFXoNLlXoAt4Ac6IvIwczpj2RsvJtxKE7LHvv7vn04scPvkNx5ZZ5zMV9YIm/hkN3+ba33dkx3+YKOfomh//UUsgFBGtMl42U+qdnoN7FTF3DNcSCr3/KIUiigi1PZYiHysYGw+5sz5tMmtUx7N48HgaYB1tBaV41fRjN9kcgpkHXT6DtwlA8+UNi9sedKsb63IDiOr/jQ/YMqcGCOHVa5Si5NQpfTxNOm+d15gmqosHGO0U2lH4gZm6qxmlOl78onlNL7ufu0ndEGsK7Mebb2Izp1XSXbLo4yM0kilTpvyazYU1MFuw72oncGuT+DGS7SQqakl0hhNQFM6IXtUXJ7KAut1gVRn0HdWdhZBWEfr2MiKudRjrEjCa1kQQveorV1jWFSJM84Caxgpf8aHMz4N1OTCNC0lCHjE1Bzr+jrh9mQOCkVPZ1bPfYrRwinA/0pXTWVLr0ONEVkyj+aKxLj1wjjTPIuIEUFWAYe5MsrzZCxXkW0Rqd27TSG34oSiwtpMa0n7GlH/mfzKTnHmWlTnxAe63/5xs9w+D+3sxtn+HL2/InnODLzSp+xb9EyPsT3J2vNGEb/nLj2isE9zBcC2x0LLYm/ZuH99uLyVK70caC0p5RtVoafHtIKvMWiWB58euniH5bje7iOmWt9w==
+  template:
+    metadata:
+      name: sa-platform-audit-logs-db
+      namespace: sa-p5
+    type: Opaque

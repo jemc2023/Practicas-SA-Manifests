@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nats-streams-config
+  namespace: {{ .Values.global.namespace }}
+data:
+  audit-stream.json: |
+    {
+      "name": {{ .Values.natsStream.name | quote }},
+      "subjects": [{{- range $i, $subject := .Values.natsStream.subjects }}{{ if $i }}, {{ end }}{{ $subject | quote }}{{- end }}],
+      "storage": {{ .Values.natsStream.storage | default "file" | quote }},
+      "retention": {{ .Values.natsStream.retention | default "interest" | quote }},
+      "num_replicas": {{ .Values.natsStream.numReplicas | default 1 }}
+    }
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nats-stream-init-v2
+  namespace: {{ .Values.global.namespace }}
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      serviceAccountName: nats-init-sa
+      restartPolicy: OnFailure
+      containers:
+        - name: nats-init
+          image: natsio/nats-box:0.19.7
+          command:
+            - sh
+            - -c
+            - |
+              until nats server check connection --server=nats://{{ required "nats.fullnameOverride es obligatorio" .Values.nats.fullnameOverride }}:4222; do
+                echo "Esperando a que NATS acepte conexiones..."
+                sleep 2
+              done
+
+              if nats stream info {{ .Values.natsStream.name }} --server=nats://{{ .Values.nats.fullnameOverride }}:4222 >/dev/null 2>&1; then
+                echo "El stream {{ .Values.natsStream.name }} ya existe, no hago nada."
+              else
+                nats stream add --server=nats://{{ .Values.nats.fullnameOverride }}:4222 --config=/streams/audit-stream.json
+              fi
+          volumeMounts:
+            - name: streams-volume
+              mountPath: /streams
+              readOnly: true
+      volumes:
+        - name: streams-volume
+          configMap:
+            name: nats-streams-config

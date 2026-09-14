@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-config
+  labels:
+    {{- include "sa-platform.labels" . | nindent 4 }}
+  namespace: {{ .Values.global.namespace }}
+data:
+  LOG_LEVEL: {{ .Values.logLevel | default "info" | quote }}
+  {{- range $key, $value := .Values.env }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}

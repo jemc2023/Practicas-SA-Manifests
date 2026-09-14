@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    {{- include "sa-platform.labels" . | nindent 4 }}
+  namespace: {{ .Values.global.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      {{- include "sa-platform.selectorLabels" . | nindent 6 }}
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  template:
+    metadata:
+      annotations:
+        {{- include "sa-platform.checksumAnnotations" (dict "context" $) | nindent 8 }}
+      labels:
+        {{- include "sa-platform.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ .Chart.Name }}-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+
+      {{- if eq .Values.global.ghcr "yes" }}
+      imagePullSecrets:
+        - name: ghcr-secret
+      {{- end}}
+
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ required (printf `image.repository es obligatorio para %s` .Chart.Name) .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          {{- if eq .Values.global.environment "prod" }}
+          imagePullPolicy: Always
+          {{- else }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.port }}
+
+          securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+
+          resources:
+            requests:
+              cpu: {{ .Values.resources.requests.cpu | default "100m" | quote }}
+              memory: {{ .Values.resources.requests.memory | default "128Mi" | quote }}
+            limits:
+              cpu: {{ .Values.resources.limits.cpu | default "300m" | quote }}
+              memory: {{ .Values.resources.limits.memory | default "512Mi" | quote }}
+
+          startupProbe:
+            httpGet:
+              path: {{ .Values.healthPath | default "/" }}
+              port: {{ .Values.port }}
+            periodSeconds: 5
+            timeoutSeconds: 10
+            failureThreshold: 12
+
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.healthPath | default "/" }}
+              port: {{ .Values.port }}
+            periodSeconds: 15
+            timeoutSeconds: 2
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.healthPath | default "/" }}
+              port: {{ .Values.port }}
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 2
+
+          envFrom:
+            - configMapRef:
+                name: {{ .Chart.Name }}-config
+            - secretRef:
+                name: {{ .Chart.Name }}-secret
+
+          {{- if .Values.readOnlyRootFsTmpFix }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          {{- end }}
+      {{- if .Values.readOnlyRootFsTmpFix }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      {{- end }}

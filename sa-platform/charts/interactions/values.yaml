@@ -1,0 +1,62 @@
+global:
+  environment: dev
+
+replicaCount: 1
+
+image:
+  repository: docker-interactions_service
+  tag: ""
+  pullPolicy: IfNotPresent
+
+port: 4000
+healthPath: /
+logLevel: info
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+service:
+  type: ClusterIP
+
+serviceAccount:
+  automount: false
+
+rbac:
+  rules: []
+
+readOnlyRootFsTmpFix: true
+
+env:
+  INTERACTIONS_PORT: "4000"
+
+secretEnv: {}
+
+db:
+  envKey: INTERACTIONS_DB_URI
+  uri: sa-platform-interactions-db-headless
+
+networkPolicy:
+  enabled: true
+  ingressFrom:
+    - app: api-gateway
+  egressExtra:
+    - selector:
+        app.kubernetes.io/name: interactions-db
+        app.kubernetes.io/instance: sa-platform
+      port: 27017

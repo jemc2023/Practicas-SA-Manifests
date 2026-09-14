@@ -1,0 +1,333 @@
+globalVars:
+  tag: &tag_val "v1.8.0"
+
+global:
+  namespace: sa-p5
+  namespaceOverride: sa-p5
+  environment: dev
+  security:
+    allowInsecureImages: true
+  ghcr: "yes"
+
+ghcr:
+  json: "AgAAPrPVJ5hsTKFzaUjNCclB4cEA45dSi2DCtH9P37C0Rn7YmluKf3wgchTXfo9RWJAgqQTz+mjo0zFDv6rSa/fjRTCzS3EdTXryp/L3mY67XBdvc+IAxg/hJIJ88NifxwxrMypMAYlgEbUiMXa3XR58NZ+O22leRQ2vdsAOU6cQ3CFUQNLrrpuipsZrwzyIMb6vfift5IUFC+PlmhP0zqN7RebD8s432EZL6Ja7f79PhSzkHdaZS9LzjCx4HeWxdqu/KfS+jHta3q37deFNGNF/fwYrVD20oyycY3dwPH6ICHu8q8+hZSbM0OxVS5+5YLRSh/uuXJSAEDsJ0TiGHM4DohE8HGhRITcRvJE3I52AbRjIb2G57mZ9XG3OpcBOU35vDn+eSep3RgMuLF/o8ZKNgNeZ733gL8llMbo9YgdBN+DKTpkI1P8rrCUzeWJRQmHer+wXRG3jX3Hd+8Cnl7sCyqqd35Xa5ZE2iDZk0Q238/q6VKoUm1mz9m4KqIcZ6S2revyUEOjq3y+lY9Wl8Lm2N4Ysx20hCFuYx9ZzKwWuRRTDx15QhFFRNzjy9hh5sc0UefwrVMeneeKnhqk0j2Vv8ZWP/+BPXG/e3UbvMF3gw9VPAmEQnQfPUz4zMgxDZQFMItCIp0szC526F5OLpMINj6gEA2yDHg6Hdr4T4cK8dGf7HBaIe8uDi6Y6jWiyUYfuGKVQJ4Vg7yNxNXhkjrPheUNBARPwqOS34+De6AOfZbNjFyml7nf/hZR/x5XIhmTyfW2Pbtqg361t3HF3WKiGEi/rD0KBACzqas8vbokWHBrUaC5wFW0vyh5ozSzSvbNqjug4ISt4qRjQhMl4nNEcaHBZwo62sWu+MadZDmIo7UV6FOSIkt2OnVVVLsCCA9b0rWkRn9HVdi/Q/00Yvkv1M22IyDHJFVQhVmgjQLsK+u8="
+
+resourceQuota:
+  enabled: true
+  requestsCpu: "3.5"
+  requestsMemory: 8Gi
+  limitsCpu: "6"
+  limitsMemory: 10Gi
+  pods: "45"
+  pvcs: "10"
+  services: "15"
+
+limitRange:
+  enabled: true
+  defaultCpu: 250m
+  defaultMemory: 256Mi
+  defaultRequestCpu: 50m
+  defaultRequestMemory: 64Mi
+  maxCpu: "1"
+  maxMemory: 512Mi
+  minCpu: 20m
+  minMemory: 32Mi
+
+networkPolicy:
+  defaultDenyAll: true
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: api.local
+      paths:
+        - path: /
+          pathType: Prefix
+          service: api-gateway-service
+          port: 8080
+
+natsStream:
+  name: AUDIT_STREAM
+  subjects:
+    - "audit.>"
+  storage: file
+  retention: interest
+  numReplicas: 1
+
+nats:
+  enabled: true
+  namespaceOverride: sa-p5
+  fullnameOverride: nats
+  config:
+    override: |
+      server_name: nats-server
+      http_port: 8222
+      jetstream {
+          store_dir: "/data"
+      }
+    jetstream:
+      enabled: true
+      fileStore:
+        pvc:
+          enabled: true
+          size: 1Gi
+          storageClass: "standard-rwo"
+  container:
+    image:
+      repository: nats
+      tag: "2.14.0-alpine"
+    merge:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 500m
+          memory: 256Mi
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        allowPrivilegeEscalation: false
+  reloader:
+    enabled: false
+
+auditlogs-db:
+  enabled: true
+  namespaceOverride: sa-p5
+  architecture: replicaset
+  replicaCount: 1
+  arbiter:
+    enabled: false
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/mongodb
+    tag: 8.0.13-debian-12-r0
+  auth:
+    enabled: true
+    rootUser: root
+    keepCreatedSecret: false
+    existingSecret: sa-platform-audit-logs-db
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: "standard-rwo" # Se agrega por la nube
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+users-identity-db:
+  enabled: true
+  namespaceOverride: sa-p5
+  architecture: replicaset
+  replicaCount: 1
+  arbiter:
+    enabled: false
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/mongodb
+    tag: 8.0.13-debian-12-r0
+  auth:
+    enabled: true
+    rootUser: root
+    keepCreatedSecret: false
+    existingSecret: sa-platform-users-identity-db
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: "standard-rwo" # Se agrega por la nube
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+products-db:
+  enabled: true
+  namespaceOverride: sa-p5
+  architecture: replicaset
+  replicaCount: 1
+  arbiter:
+    enabled: false
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/mongodb
+    tag: 8.0.13-debian-12-r0
+  auth:
+    enabled: true
+    rootUser: root
+    keepCreatedSecret: false
+    existingSecret: sa-platform-products-db
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: "standard-rwo" # Se agrega por la nube
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+interactions-db:
+  enabled: true
+  namespaceOverride: sa-p5
+  architecture: replicaset
+  replicaCount: 1
+  arbiter:
+    enabled: false
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/mongodb
+    tag: 8.0.13-debian-12-r0
+  auth:
+    enabled: true
+    rootUser: root
+    keepCreatedSecret: false
+    existingSecret: sa-platform-interactions-db
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: "standard-rwo" # Se agrega por la nube
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+audit-logs:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/jemc2023/audit-logs
+    tag: *tag_val
+  logLevel: info
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
+  db:
+    uri: "AgArX0rMVWb+rHh12cXsdNYwKsh3q+9nWEvx9hrpPbLIwnmgP7lujYSaQeUjPnk8DIq5kRmA4Di1rw9PHlLQeMnJ3LLU5SDhBofyQuPBV0G0z0Qe25nToDg2zCGrJJ2B/SjegWZ+/vosihrN7prtjIYsQPevhFyAYzvwro832dq+5Eh0dSfMS8GE1LV5aBB20Ut+owqWcN5debzhZkpFeclpFDnbWK1AMTrZ5bj0WDSNuKZ0Yi8163/yVryx5MPmsSCzuFDvp2039JYmhfpB2Q6ZcM4Qf2LsYlM9a0DJFHYFyvWAKknmWTq00X1EsFAEVjN5sVaL85fiNtvChxmNzyZts2OTgdG+k0n9f3yRQPyN5gpHPKiABew73vVtbRkrW9+kbFPUnnMSpUZauWt43DQYDvlf9qOfGwuZGrpDc4M3ZM4Ka5+ffZlATl5TYWvnzoUDmUNbs/NVs9bpHWDc9ilDNb3nZdZIXnoIJ213MtbEg94qpPDxjMJl7BvMqNGe7Ul3z2Wl0Xqoce1lZO1kKZi7Px/cV5dtgVnCU+NU8+NJbWNF3Dz2Z3HLw8KB2rgKLZJngyixoF/23YyvpPu7Vr4ZOHAQCmdVBPErh6OAQCb4cc38Br4LhOGzvuaB7IFQ8j02gOdnjTe9USuJf8j4gYBNUsWgSaVxLwEueACG+/AfsUWLaUvL4Uf8liQo7ZM3nw96Ov4uEnwjJo1wbYE9x8L/z5gTRprlymj5xNlpv296W1hTUFhk+6uO91GC1OQ0SiQghT83shNZuQZe8HQo3yHfhxp/59ZXbZtTae+8oZA8V9Mxcaq6NIJgwo/3CKFXaklu4kVkE5JgmQbaGtJV"
+    port: 27017
+
+users-identity:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/jemc2023/users-identity
+    tag: *tag_val
+  logLevel: info
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
+  secretEnv:
+    JWT_SECRET: "AgBamDRLX6IARkkFN5oTD2qtgShsfqUnRiBqBvu/Ou/PVv6wtmGAA2B9y6TVlXbPfI8WGXuqhkWZkpImhZ7wSR78PuJCJpY0DIMo7drhSZDEG6Ud1odlJZ3KCTWpbvo+XE9jJMxShKaPzOxBuCpxpxDmQM7wGUroBCCFTDReYmf6/qRDsXTrtmV/zTB2FeroURujCLVf+jSYK+h6B8+zx2V2ti14UOHR9SMJzcRUtZ4/i/KM0sREPbZxQ4V13ur2XgV82vCagvqoDX3lkDxR7ToMSwT4hFOFVN/cNTpJD9IJut4qyA5HMR8Savr9U9x3LK7ECyPVwxQjqujiI7/CsjqmZjwy+WLN8toCrFunxL3uIOh64mPO4PPe3H6i+4lAOpDRJrYCkNpx6rdNbsTOz2/szd3KTrIcxUo8CNkIXmGrLDnd2tZj3wSOmYe59RiWfpOSZbyApHqquYUehuFvTcA9ElGYZYmQ7PZI/IPgPWletFrsYBtKlkFp1/O1oDgSsYHxcBUYNMBQR5hqedfmvuJEoIqEQYNr9kFdIuEuUA3f68QE2OHKwyNowJhaakPwAbs83ira7076LqbzqIiP9hIE3qlJUeCiZ1uiD4ZPPIlUAz82nlOWCwWCv+Z2zQR5QCq4bvdXMNHjvlu05h8F1JXYeMu1eITVEEIVcRU4y2D/HSOQjwqRESZkRbhIbE1V9HVQoL+JuJhXuX0457jWAD0yhxG4N2psrw=="
+  db:
+    uri: "AgAULiqH+dq4lH/sOlXIx0C2A/f2hpjlZjk1AU4uPuGrAxudmEJKh30+2QxLcONrIc4861veicENrsgUAFfmxnwLZg3JgcHbd+fKYpEuIs1HNL8PfloVExLr+BsBA23cdlLvo2FprSLJYbE7htaBQnqfn+8odphmopaGlTZQLOyhsi7rKa7Ll0OGYDElq1+ohUH0jvsL4IAgvX2sun7z/w2Y3k399VHBTLGXGx8npl+0jZPbzMlSffFaiJe0F5Zc/wPN2RPZzmnGJ2WVtGMXtV94Zm+fOma/D6U4FISGju8fSqkwrGYiO4xi0GFM/S55LN+JFqIk5tyNRW35buHWoqiFc/Ot6ybzeBaaIRX47Z/tLVhA+pgOZTAI0+SywJmNqT7E4ZVzRCJdn9Z0Y2826ldkqxSvGxuUSrtnluXuwjK7609qbkzu0f+5ftVFPtnIaMAaan/++F3hVh6rcr+qGpwMiK6bMEETCdMIoiyy3yoqFVVicCpQfkK2sunUlxO3UGsaYPfd0VwIA39XWz8MxRs8vR+HjZtizoV0f3ArGrBL8RZbAnbaVWSoiAfj1CksW+OwnU3Xn5UDdEgv3Q/7BeFtIVz8Sv3fLlhIlnpNeUlzCMJ2QY5i44mbRvVm67P6WzMJDpUzstzLCQYkRH+6jzlJiU5bPaaz2UkrLgGYX4d5bJfbiYhPpkTRPIbMv1lhw4RsAEnCF+j9yCyGUdGI/b6qE/GcRGuk9wArRicaPI1uQABQrSH3+Lm4aIRT0qnIXe0541eq7n0oyaUW8GDVfcmEsNTCB2AtGl56FPKFf0D3XJivCngc8bhZDow36r2Tbzdp+m7S02inwGkZHzMMQDKLxjMdVWfH"
+    port: 27017
+
+api-gateway:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/jemc2023/api-gateway
+    tag: *tag_val
+  logLevel: info
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
+  secretEnv:
+    JWT_SECRET: "AgCTqbMRMry0mkH4ceuuBPaAnGOy/mAbQnuSus99wo/475KRWIzDPWsICdxFivg8ETRFgNkJoOtreN8U9jatscM2NSokREtINchqgASQ431SOrGK9juTFaHQ5fGFCsFsUbvfBHQ5Efk3KUZtjJTUEQjHmJOgs0G53A3Bb0pT0I8l24/tG6a1XLX+zKNtCcx4h2FiW5GBLXVK5u4+v2Ba9LgJpG/X3Rqxgj3GBnBWNbYXucKhONIIR4TdYG5GSJS3Y7N3MUc073+a1KDu9mRMzvjWO4I/jdxsnOO74kQyS0SdHRr9SJuRlsVtWJk/ob+/MAzcBuz4DUT/DHJgx8A02tqgWbwLv5KCmWWCORtgQCNRvnm+Xy0OKe+iLGUAa8hxVJ3Fb8RQ2k3XKlQw2jWRvehI7YyJEyttzuoSHYEujE9F9m7/+ozrsrWoXk2XP4QGfCp3LEkBMEWjPCGPPCufl2ectCp3ck566TqyinQCIarlX2jKUpX9yFiPnRWnlFKEO2Ba7nX5k2kaWUZL6XJPTKLjaaCAeaPInRGXrCPF/NK3stDSINV6OBAph+sFisveSlB9Yb7oiE4RY6D7CzNocNEmBTjLeZamsXJuG24JkH+Jdq6GRWoA89b4ol+X72RfJiFGtkf8zhBAUEQSicNzpKuTsJDCM9OTktxURKiL4e92y4bdg9ond4+07eiliwyj1m7DOxtj4MuVUG+65j1rT+CUNWb6rl66Pg=="
+
+products:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/jemc2023/products
+    tag: *tag_val
+  logLevel: info
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
+  db:
+    uri: "AgAKxIWqk4mINUkD1cSS0QP6D6XApLDf4Gp9r4e+L+S23zaDzP8YzHXlknEakPB3RWABIj5G4tePGykkU2EqV47VyHg8oo8JFtVOI3Q6f4raVRLDa/TRNie7PrwDiRLk0VelGDKPdvoMT4RUnpHCKVP8MkCOKCLM5kQC7lOp/JdCgnfDIXB+oVRZI2JbOaVsXMDKpBB2XjRAWlK+Zg3Cdb6L0swlGLYiJbxbdjHCvui4zbj1CYqZDLLKpN5b5P/hPInJtiTJEBwAuWyrxyDIrivvrz/EmuqTjGlSeEAExpw+1Jg2YP5miJzVexhxYOG1kouYm0jmWKMHl5ZDo+uBEkm+GGD31fRUfvRNQFZ0q/bA2V9VC5u3YD7EJrv1AYZ1aiHNyHcE64g37cjFEJG3RQ2zI5nvMvvzGoBzcFrTgfWkyoGOUlJRf2kOTECdrhH2QF4wOm80o/50Pc/1Zw5Tr1nqaB3t2P9EsqCn8Mlq5hgiSttMP3KBTDNj/NcZRFQ7UCdqSVbpyEZtvwCGeRJehUxqFRbBa1+RNvMOhUlMrb73193ePtOJkRp9lToj0uUXRVCixy/EE1tT5N6NrDp3EdU038ORdDRXj9OHGewnHXZCH/EpMxSFwTghvN8uxgtp3mt3Hzgf1fp8cQQ3nOpC0DpKEC0911gi5IOM1U8zVFfUDFg+hV90f6nn/2lHJ3U0sF04X74IrSB6ZdJdmvFJEKNu7279jMOfBzF1RdM4D6ChF2z2oguE3feiNPg8USCJz5hBSK9XU8ww9vdebp2yHN/LNOmwS4RsWk0JNxE9K229A85Irl6tj3eVfVL9faJRu2+TjbDzyKFuHpNP"
+    port: 27017
+
+interactions:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/jemc2023/interactions
+    tag: *tag_val
+  logLevel: info
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
+
+  db:
+    uri: "AgBKiXF09dEwW8ZpAIANlIM0s3PdNk5s2snbm0xxNu6MCdTfDyLwM8I8GRjKukrfEGiiUcEFZGZVsu2WHtEyaWXBFdhsaXjG5OBqLTv5Kp2RNbmMrS0YR2F/x5ocr177Eem3YAPdWHR2YtPVfIHif1y2xICHMgEy8RMygFI9bAjCTkiASU9efwU019cMCPV7xfEQ+VfgTF1cLH6J+7g+5MyOCGGr9BCfSdR0NUjYE9l39u7djd0KpuBRbJULbbEJWsLmv64h60r1V5cT7H2pY/Q31K6do38SJESPxWYtI6+W+WchKpe0JgMxgxryec1OLKBgFeaxh+DgynqXk5qZdb3a9rVBnLnrCosFLjV9peTKXDpBYQzVky+EeQ1Wbn1Sh7BXGngk+BAh6Gq2n+RgsSKprdzNHAvReRijNYkcvyE4PzXlm/jsO55QKwgegCZh21LfZijFNDCCDpFbQ575R8FM1LlbICjaER1xGNq+HTDXwr23HWM/7QKK2hqZ4WFK7oh5MZezUcptqexvx8kDhvKe6jFaMrQT/0+R5L2hGREH747yTph+/w1HH0KlcwEERZoVMshxkxuukPI9OCOV4UYUwDkt3RfvdXNV+NI3Gesq7Sov8hFAO3877y7m8OB3qDZBMCRSNgAqC5fX2l00spI5X5cibxgmPQ32niw4XDLfomx9v7byffcoi0T0T9ap8JqVdDmTOshskiJKOJZWf+mHJ6zOqiz7Ik+bJPL5Br3Z7mRKSOTQTO5ZKSp67EjirYydSIHrRjP1AvjbL3/MAfl9hwJrRlkGAm5DLEHo2D+CbAtEmfQrbTO35IY/2DMQv5+UIuFeCv+ILS2cAROmQr2+oI0="
+    port: 27017
+
+cronjobs:
+  insertDB:
+    schedule: "*/2 * * * *"
+    image:
+      repository: ghcr.io/jemc2023/job-insert-db
+      tag: *tag_val
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+  summary:
+    schedule: "*/10 * * * *"
+    image:
+      repository: ghcr.io/jemc2023/job-summary
+      tag: *tag_val
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi

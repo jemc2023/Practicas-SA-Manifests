@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cronjob-insert-db
+  namespace: {{ .Values.global.namespace }}
+spec:
+  schedule: {{ required "cronjobs.insertDB.schedule es obligatorio" .Values.cronjobs.insertDB.schedule | quote }}
+  concurrencyPolicy: Forbid
+  backoffLimit: 2
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: job1-sa
+
+          {{- if eq .Values.global.ghcr "yes" }}
+          imagePullSecrets:
+            - name: ghcr-secret
+          {{- end}}
+
+          containers:
+            - name: tarea-cron
+              image: "{{ .Values.cronjobs.insertDB.image.repository }}:{{ .Values.cronjobs.insertDB.image.tag | default "latest" }}"
+              imagePullPolicy: {{ .Values.cronjobs.insertDB.image.pullPolicy | default "IfNotPresent" }}
+              resources:
+                requests:
+                  cpu: {{ .Values.cronjobs.insertDB.resources.requests.cpu | default "50m" | quote }}
+                  memory: {{ .Values.cronjobs.insertDB.resources.requests.memory | default "64Mi" | quote }}
+                limits:
+                  cpu: {{ .Values.cronjobs.insertDB.resources.limits.cpu | default "100m" | quote }}
+                  memory: {{ .Values.cronjobs.insertDB.resources.limits.memory | default "128Mi" | quote }}
+              envFrom:
+                - secretRef:
+                    name: audit-logs-secret
+          restartPolicy: OnFailure

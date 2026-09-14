@@ -1,0 +1,65 @@
+global:
+  environment: dev
+
+replicaCount: 1
+
+image:
+  repository: docker-audit_logs_service
+  tag: ""
+  pullPolicy: IfNotPresent
+
+port: 8000
+healthPath: /audit-logs/
+logLevel: info
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+service:
+  type: ClusterIP
+
+serviceAccount:
+  automount: false
+
+rbac:
+  rules: []
+
+env:
+  NATS_SERVER_URL: "nats://nats:4222"
+
+secretEnv: {}
+
+db:
+  envKey: AUDIT_LOGS_DB_URI
+  uri: sa-platform-auditlogs-db-headless
+
+networkPolicy:
+  enabled: true
+  ingressFrom:
+    - app: api-gateway
+  egressExtra:
+    - selector:
+        app.kubernetes.io/name: nats
+        app.kubernetes.io/instance: sa-platform
+        app.kubernetes.io/component: nats
+      port: 4222
+    - selector:
+        app.kubernetes.io/name: auditlogs-db
+        app.kubernetes.io/instance: sa-platform
+      port: 27017
