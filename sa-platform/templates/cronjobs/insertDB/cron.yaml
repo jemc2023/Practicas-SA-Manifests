@@ -14,6 +14,10 @@ spec:
       template:
         spec:
           serviceAccountName: job1-sa
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
 
           {{- if eq .Values.global.ghcr "yes" }}
           imagePullSecrets:
@@ -22,6 +26,10 @@ spec:
 
           containers:
             - name: tarea-cron
+              securityContext:
+                runAsNonRoot: true
+                readOnlyRootFilesystem: true
+                allowPrivilegeEscalation: false
               image: "{{ .Values.cronjobs.insertDB.image.repository }}:{{ .Values.cronjobs.insertDB.image.tag | default "latest" }}"
               imagePullPolicy: {{ .Values.cronjobs.insertDB.image.pullPolicy | default "IfNotPresent" }}
               resources:
