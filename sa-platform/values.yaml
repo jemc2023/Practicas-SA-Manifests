@@ -1,5 +1,5 @@
 globalVars:
-  tag: &tag_val "v9"
+  tag: &tag_val "master"
 
 global:
   namespace: sa-p5
@@ -59,6 +59,18 @@ nats:
   enabled: true
   namespaceOverride: sa-p5
   fullnameOverride: nats
+  natsBox:
+    enabled: false
+  podTemplate:
+  merge:
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
   config:
     override: |
       server_name: nats-server
