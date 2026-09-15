@@ -1,5 +1,5 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: {{ .Chart.Name }}
   labels:
@@ -12,10 +12,14 @@ spec:
       {{- include "sa-platform.selectorLabels" . | nindent 6 }}
 
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 1
+    canary:
+      steps:
+        - setWeight: 25
+        - pause: { duration: 10s }
+        - setWeight: 50
+        - pause: { duration: 10s }
+        - setWeight: 100
+        - pause: { duration: 10s }
 
   template:
     metadata:
