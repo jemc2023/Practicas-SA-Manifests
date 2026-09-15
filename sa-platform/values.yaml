@@ -1,5 +1,5 @@
 globalVars:
-  tag: &tag_val "v1.8.0"
+  tag: &tag_val "v9"
 
 global:
   namespace: sa-p5
