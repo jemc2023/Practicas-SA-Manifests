@@ -6,13 +6,13 @@ metadata:
 spec:
   schedule: {{ required "cronjobs.insertDB.schedule es obligatorio" .Values.cronjobs.insertDB.schedule | quote }}
   concurrencyPolicy: Forbid
-  backoffLimit: 2
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 2
   jobTemplate:
     spec:
       template:
         spec:
+          backoffLimit: 2
           serviceAccountName: job1-sa
           securityContext:
             runAsNonRoot: true

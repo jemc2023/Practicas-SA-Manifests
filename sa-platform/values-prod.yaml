@@ -1,0 +1,158 @@
+global:
+  environment: prod
+  security:
+    allowInsecureImages: false
+
+resourceQuota:
+  requestsCpu: "16"
+  requestsMemory: 32Gi
+  limitsCpu: "32"
+  limitsMemory: 64Gi
+  pods: "150"
+  pvcs: "30"
+
+ingress:
+  hosts:
+    - host: api.midominio.com
+      paths:
+        - path: /
+          pathType: Prefix
+          service: api-gateway-service
+          port: 8080
+
+natsStream:
+  numReplicas: 3
+
+nats:
+  config:
+    jetstream:
+      fileStore:
+        pvc:
+          size: 10Gi
+          storageClass: "fast-rwo"
+
+auditlogs-db:
+  architecture: replicaset
+  replicaCount: 3
+  persistence:
+    size: 20Gi
+    storageClass: "fast-rwo"
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
+users-identity-db:
+  architecture: replicaset
+  replicaCount: 3
+  persistence:
+    size: 20Gi
+    storageClass: "fast-rwo"
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
+products-db:
+  architecture: replicaset
+  replicaCount: 3
+  persistence:
+    size: 50Gi
+    storageClass: "fast-rwo"
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+
+interactions-db:
+  architecture: replicaset
+  replicaCount: 3
+  persistence:
+    size: 50Gi
+    storageClass: "fast-rwo"
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+
+audit-logs:
+  replicaCount: 3
+  logLevel: warn
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+  autoscaling:
+    minReplicas: 3
+    maxReplicas: 10
+
+users-identity:
+  replicaCount: 3
+  logLevel: error
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+  autoscaling:
+    minReplicas: 3
+    maxReplicas: 10
+
+api-gateway:
+  replicaCount: 4
+  logLevel: error
+  resources:
+    requests:
+      cpu: 300m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+  autoscaling:
+    minReplicas: 4
+    maxReplicas: 15
+
+products:
+  replicaCount: 3
+  logLevel: error
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+  autoscaling:
+    minReplicas: 3
+    maxReplicas: 10
+
+interactions:
+  replicaCount: 3
+  logLevel: error
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+  autoscaling:
+    minReplicas: 3
+    maxReplicas: 10

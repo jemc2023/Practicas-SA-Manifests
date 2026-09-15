@@ -1,0 +1,94 @@
+global:
+  environment: dev
+  security:
+    allowInsecureImages: true
+
+# Ajustes de límites para el cluster de Dev
+resourceQuota:
+  requestsCpu: "2"
+  requestsMemory: 4Gi
+  limitsCpu: "4"
+  limitsMemory: 6Gi
+  pods: "20"
+
+# Ingress apuntando a un dominio de desarrollo
+ingress:
+  hosts:
+    - host: api.dev.local
+      paths:
+        - path: /
+          pathType: Prefix
+          service: api-gateway-service
+          port: 8080
+
+# Infraestructura ligera (1 sola réplica)
+nats:
+  config:
+    jetstream:
+      fileStore:
+        pvc:
+          size: 1Gi
+
+auditlogs-db:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
+users-identity-db:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
+products-db:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
+interactions-db:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
+# Microservicios con perfil de depuración y réplicas mínimas
+audit-logs:
+  replicaCount: 1
+  logLevel: debug
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
+
+users-identity:
+  replicaCount: 1
+  logLevel: debug
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
+
+api-gateway:
+  replicaCount: 1
+  logLevel: debug
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
+
+products:
+  replicaCount: 1
+  logLevel: debug
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
+
+interactions:
+  replicaCount: 1
+  logLevel: debug
+  autoscaling:
+    minReplicas: 1
+    maxReplicas: 2
