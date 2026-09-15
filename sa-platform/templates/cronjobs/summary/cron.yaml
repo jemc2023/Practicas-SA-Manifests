@@ -10,9 +10,9 @@ spec:
   failedJobsHistoryLimit: 2
   jobTemplate:
     spec:
+      backoffLimit: 2
       template:
         spec:
-          backoffLimit: 2
           serviceAccountName: job2-sa
           securityContext:
             runAsNonRoot: true
