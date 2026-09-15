@@ -1,0 +1,14 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: ghcr-secret
+  namespace: kyverno
+spec:
+  encryptedData:
+    JSON: AgBffd2iMh3gZlaN91t2FfZHt1DG7v3BHlkIM0dxrCfBSuIawRo2XsBcnqOsUl4p6ctCNfwQ4SMeQ5szSpsul0lbYixS/Jik5MQKMSu3TqJhcPa4fhxiPZDfK1KmcFqaoyzj7be2pAN8U/gnxRct+o4TzjejyFTqJOTlwhmc5l9USYRrBVQkUxbOmOF0B8hyx+vNsFQeizlS82BCfsBFPuSL66mcMuY4uVUlWEoyqyL293YeQPqLXk+cEgpN16Qr9TDOGaL/y8N96Yugeda0pCOxV+wCWEYcyZQ9+v6TFuVJ24igLjkx9dN1ZWkSNu1oVBV25SyvAyjx3yJWrMWJIBtp389l3qJ6yk4I75XBquY/fTKK/KhI4ACgl50JuR5wuDM4zXvEVPwoCQnfzToyV9PcAiTrFMh4jDvYW+L5yfoQZpvV+n3h/AWrxivzx1ZxizWBqozB++gIPfFemU6k47ioss+jVv+EWEjPcp0/8OqZDPDBD2VW0MuAatztTUbMkshYFhPBnRCZUNo9+LNWnNjBAzklAofjWKVCfH23Nyu1zs5PONIpwMqzb8W1ZiKJACBplK01zaSbYtxtod/ewso/P3DOrKmxzB2SedaQ5azWVLN5j8misEw9GLTdtyvVZ2+8F5fNaXFe7tFNJL98egGFctAi9NrEdbtJ8OrlX9+c+n1gz7fgFEmMaj0SE3NXgOQSCEzdknS6jIBLlgUCztK65TuDY/jH/IoxLZq0f9YowaVlv4BLgbJOkhwFzWnqWsSiSp3je4LZRoAukQJA6YPSa4uXwgxoRiDVxpguPxb/8AlN3PTkXGRXjK1qA4uDoTk3HxYMS8FUC5LZRi5PyV8DIFHYubU/qJMuj3bCnWb4xXYT5rZ0Ut8SKE2jz0OcmGSv+BeDzIb2qEg4Fy0ewMBN7zwwusB5FV0C//F6f2wyP08=
+  template:
+    metadata:
+      name: ghcr-secret
+      namespace: kyverno
+    type: Opaque
