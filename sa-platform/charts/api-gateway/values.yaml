@@ -3,6 +3,7 @@ global:
   namespace: sa-p5
 
 replicaCount: 1
+revisionHistoryLimit: 2
 
 image:
   repository: docker-api_gateway

@@ -218,6 +218,7 @@ interactions-db:
 
 audit-logs:
   replicaCount: 1
+  revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/audit-logs
     tag: *tag_val
@@ -238,6 +239,7 @@ audit-logs:
 
 users-identity:
   replicaCount: 1
+  revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/users-identity
     tag: *tag_val
@@ -260,6 +262,7 @@ users-identity:
 
 api-gateway:
   replicaCount: 1
+  revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/api-gateway
     tag: *tag_val
@@ -279,6 +282,7 @@ api-gateway:
 
 products:
   replicaCount: 1
+  revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/products
     tag: *tag_val
@@ -299,6 +303,7 @@ products:
 
 interactions:
   replicaCount: 1
+  revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/interactions
     tag: *tag_val

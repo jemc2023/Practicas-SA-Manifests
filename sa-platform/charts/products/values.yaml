@@ -2,6 +2,7 @@ global:
   environment: dev
 
 replicaCount: 1
+revisionHistoryLimit: 2
 
 image:
   repository: docker-products_service
