@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argo-rollouts
+  name: kyverno-policies
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "5"
@@ -10,25 +10,18 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: "https://argoproj.github.io/argo-helm"
-    chart: argo-rollouts
-    targetRevision: HEAD
+    repoURL: https://github.com/jemc2023/Practicas-SA-Manifests.git
+    targetRevision: master
+    path: kyverno-policies
     helm:
-      parameters:
-        - name: keepCRDs
-          value: "false"
+      valueFiles:
+        - values.yaml
   destination:
     server: "https://kubernetes.default.svc"
-    namespace: argo-rollouts
+    namespace: kyverno
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-    retry:
-      limit: 5
-      backoff:
-        duration: 5s
-        factor: 2
-        maxDuration: 3m

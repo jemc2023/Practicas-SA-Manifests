@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: sa-platform
+  name: argo-rollouts
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "6"
@@ -10,15 +10,16 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/jemc2023/Practicas-SA-Manifests.git
-    targetRevision: master
-    path: sa-platform
+    repoURL: "https://argoproj.github.io/argo-helm"
+    chart: argo-rollouts
+    targetRevision: HEAD
     helm:
-      valueFiles:
-        - values.yaml
+      parameters:
+        - name: keepCRDs
+          value: "false"
   destination:
-    server: https://kubernetes.default.svc
-    namespace: default
+    server: "https://kubernetes.default.svc"
+    namespace: argo-rollouts
   syncPolicy:
     automated:
       prune: true
@@ -31,8 +32,3 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
-  ignoreDifferences:
-    - group: batch
-      kind: CronJob
-      jsonPointers:
-        - /spec/jobTemplate/spec/template/spec/containers/0/image
