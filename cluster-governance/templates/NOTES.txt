@@ -1,0 +1,17 @@
+Release "{{ .Release.Name }}" desplegado correctamente.
+
+Namespace gestionado:      {{ include "cluster-governance.namespaceName" . }}
+ServiceAccount:             {{ include "cluster-governance.serviceAccountName" . }}
+ResourceQuota habilitada:   {{ .Values.resourceQuota.enabled }}
+LimitRange habilitado:      {{ .Values.limitRange.enabled }}
+NetworkPolicy (deny-all):   {{ .Values.networkPolicy.enabled }}
+Role/RoleBinding:           {{ .Values.rbac.role.enabled }}
+ClusterRole/ClusterRoleBinding: {{ .Values.rbac.clusterRole.enabled }}
+
+Verifica los recursos con:
+  kubectl get ns {{ include "cluster-governance.namespaceName" . }}
+  kubectl get resourcequota,limitrange,networkpolicy -n {{ include "cluster-governance.namespaceName" . }}
+  kubectl get role,rolebinding -n {{ include "cluster-governance.namespaceName" . }}
+{{- if .Values.rbac.clusterRole.enabled }}
+  kubectl get clusterrole,clusterrolebinding -l app.kubernetes.io/instance={{ .Release.Name }}
+{{- end }}

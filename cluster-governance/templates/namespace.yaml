@@ -1,0 +1,16 @@
+{{- if .Values.namespace.create }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ include "cluster-governance.namespaceName" . }}
+  labels:
+    kubernetes.io/metadata.name: {{ include "cluster-governance.namespaceName" . }}
+    {{- include "cluster-governance.labels" . | nindent 4 }}
+    {{- with .Values.namespace.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with (merge (deepCopy .Values.commonAnnotations) .Values.namespace.annotations) }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

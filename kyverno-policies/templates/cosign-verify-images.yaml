@@ -1,0 +1,37 @@
+{{- if .Values.policies.cosignVerifyImages.enabled }}
+apiVersion: kyverno.io/v1
+kind: Policy
+metadata:
+  name: cosign
+  namespace: {{ .Values.policies.cosignVerifyImages.namespace | default .Release.Namespace }}
+  labels:
+    {{- include "kyverno-policies.labels" . | nindent 4 }}
+  {{- with .Values.commonAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  validationFailureAction: {{ .Values.global.validationFailureAction | default .Values.policies.cosignVerifyImages.validationFailureAction }}
+  background: {{ .Values.policies.cosignVerifyImages.background }}
+  webhookTimeoutSeconds: {{ .Values.policies.cosignVerifyImages.webhookTimeoutSeconds }}
+  failurePolicy: {{ .Values.policies.cosignVerifyImages.failurePolicy }}
+  rules:
+    - name: check-image
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      verifyImages:
+        - imageReferences:
+            {{- toYaml .Values.policies.cosignVerifyImages.imageReferences | nindent 12 }}
+          imageRegistryCredentials:
+            secrets:
+              {{- toYaml .Values.policies.cosignVerifyImages.imageRegistrySecrets | nindent 14 }}
+          attestors:
+            - count: {{ .Values.policies.cosignVerifyImages.attestorCount }}
+              entries:
+                - keys:
+                    publicKeys: |-
+                      {{- .Values.policies.cosignVerifyImages.publicKeys | nindent 22 }}
+{{- end }}

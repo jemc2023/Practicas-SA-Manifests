@@ -1,0 +1,50 @@
+{{- if .Values.policies.disallowLatestTag.enabled }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-latest-tag
+  labels:
+    {{- include "kyverno-policies.labels" . | nindent 4 }}
+  annotations:
+    policies.kyverno.io/title: Disallow Latest Tag
+    policies.kyverno.io/category: Best Practices
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/description: >-
+      La etiqueta ':latest' es mutable y puede causar comportamientos
+      inesperados si la imagen subyacente cambia sin previo aviso.
+      Esta política exige que cada contenedor especifique un tag explícito
+      y prohíbe el uso de 'latest' (implícito o explícito).
+    {{- with .Values.commonAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  validationFailureAction: {{ .Values.global.validationFailureAction | default .Values.policies.disallowLatestTag.validationFailureAction }}
+  background: {{ .Values.policies.disallowLatestTag.background }}
+  rules:
+    - name: require-image-tag
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "Toda imagen debe especificar un tag explícito (no se permite omitirlo)."
+        pattern:
+          spec:
+            containers:
+              - image: "*:*"
+
+    - name: validate-image-tag
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "No se permite usar el tag 'latest'. Especifica una versión inmutable, ej. 'v1.2.3'."
+        pattern:
+          spec:
+            containers:
+              - image: "!*:latest"
+{{- end }}
