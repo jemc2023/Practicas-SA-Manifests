@@ -19,6 +19,10 @@ spec:
           value: "false"
         - name: crds.keep
           value: "false"
+        - name: config.failurePolicy
+          value: "Ignore"
+        - name: webhooksCleanup.enabled
+          value: "true"
   destination:
     server: "https://kubernetes.default.svc"
     namespace: kyverno
