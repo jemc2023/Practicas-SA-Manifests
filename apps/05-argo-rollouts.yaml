@@ -10,13 +10,13 @@ metadata:
 spec:
   project: default
   source:
-    - repoURL: "https://argoproj.github.io/argo-helm"
-      chart: argo-rollouts
-      targetRevision: HEAD
-      helm:
-        parameters:
-          - name: keepCRDs
-            value: "false"
+    repoURL: "https://argoproj.github.io/argo-helm"
+    chart: argo-rollouts
+    targetRevision: HEAD
+    helm:
+      parameters:
+        - name: keepCRDs
+          value: "false"
   destination:
     server: "https://kubernetes.default.svc"
     namespace: argo-rollouts
