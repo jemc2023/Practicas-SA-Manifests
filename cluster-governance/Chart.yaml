@@ -1,0 +1,20 @@
+apiVersion: v2
+name: cluster-governance
+description: |
+  Chart de gobierno de clúster: crea un Namespace con sus controles de
+  cuotas (ResourceQuota/LimitRange), aislamiento de red (NetworkPolicy) y
+  permisos RBAC mínimos (ServiceAccount, Role/RoleBinding y, opcionalmente,
+  ClusterRole/ClusterRoleBinding) para una aplicación o equipo.
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - governance
+  - rbac
+  - namespace
+  - resource-quota
+  - network-policy
+home: https://example.com/cluster-governance
+maintainers:
+  - name: Platform Team
+    email: platform@example.com

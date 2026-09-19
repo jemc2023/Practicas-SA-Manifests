@@ -1,0 +1,74 @@
+nameOverride: ""
+fullnameOverride: ""
+
+commonLabels: {}
+commonAnnotations: {}
+
+namespace:
+  create: true
+  name: "sa-p5"
+  labels: {}
+  annotations: {}
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+  automountServiceAccountToken: true
+
+resourceQuota:
+  enabled: true
+  hard:
+    requests.cpu: "3.5"
+    requests.memory: 8Gi
+    limits.cpu: "8"
+    limits.memory: 18Gi
+    pods: "150"
+    persistentvolumeclaims: "80"
+    services: "25"
+
+limitRange:
+  enabled: true
+  limits:
+    - type: Container
+      default:
+        cpu: 250m
+        memory: 256Mi
+      defaultRequest:
+        cpu: 50m
+        memory: 64Mi
+      max:
+        cpu: "1"
+        memory: 512Mi
+      min:
+        cpu: 20m
+        memory: 32Mi
+
+networkPolicy:
+  enabled: true
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress: []
+  egress: []
+
+rbac:
+  role:
+    enabled: true
+    rules:
+      - apiGroups: [""]
+        resources: ["pods", "services", "configmaps", "persistentvolumeclaims"]
+        verbs: ["get", "list", "watch"]
+      - apiGroups: ["apps"]
+        resources: ["deployments", "statefulsets"]
+        verbs: ["get", "list", "watch", "create", "update", "patch"]
+
+  clusterRole:
+    enabled: false
+    rules:
+      - apiGroups: [""]
+        resources: ["nodes", "namespaces"]
+        verbs: ["get", "list", "watch"]
+      - apiGroups: [""]
+        resources: ["pods"]
+        verbs: ["get", "list", "watch"]

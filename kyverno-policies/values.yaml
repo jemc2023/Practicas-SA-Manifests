@@ -1,0 +1,51 @@
+nameOverride: ""
+fullnameOverride: ""
+
+commonLabels: {}
+commonAnnotations: {}
+
+global:
+  # -- Si se define (Enforce|Audit), sobrescribe validationFailureAction en
+  # TODAS las políticas de abajo. Útil para desplegar todo en modo "Audit"
+  # primero (observar sin bloquear) y pasar a "Enforce" cuando ya no haya
+  # falsos positivos. Vacío = respeta el valor definido por cada política.
+  validationFailureAction: ""
+
+policies:
+  disallowLatestTag:
+    enabled: true
+    validationFailureAction: Enforce
+    background: true
+
+  requireResourceLimits:
+    enabled: true
+    validationFailureAction: Enforce
+    background: true
+    excludeNamespaces:
+      - argocd
+      - kyverno
+      - kube-system
+      - argo-rollouts
+
+  requireRunAsNonRoot:
+    enabled: true
+    validationFailureAction: Enforce
+    background: true
+
+  cosignVerifyImages:
+    enabled: true
+    namespace: "sa-p5"
+    validationFailureAction: Enforce
+    background: false
+    webhookTimeoutSeconds: 30
+    failurePolicy: Fail
+    imageReferences:
+      - "ghcr.io/jemc2023/*:*"
+    imageRegistrySecrets:
+      - ghcr-secret
+    attestorCount: 1
+    publicKeys: |-
+      -----BEGIN PUBLIC KEY-----
+      MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAETbBR1W5BKrdw2vOfiTPFuEuMy0F+
+      8ApizuWphDvma05cRp4NvGwhlxM2s5nzjGJK9Vhkej3IN4uCDYweBhSdnA==
+      -----END PUBLIC KEY-----

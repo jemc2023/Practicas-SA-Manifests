@@ -1,0 +1,18 @@
+Release "{{ .Release.Name }}" desplegado correctamente.
+
+Políticas Kyverno habilitadas:
+  - disallow-latest-tag:        {{ .Values.policies.disallowLatestTag.enabled }}
+  - require-resources-limits:   {{ .Values.policies.requireResourceLimits.enabled }}
+  - require-run-as-nonroot:     {{ .Values.policies.requireRunAsNonRoot.enabled }}
+  - cosign (namespace: {{ .Values.policies.cosignVerifyImages.namespace | default .Release.Namespace }}): {{ .Values.policies.cosignVerifyImages.enabled }}
+
+{{- if .Values.global.validationFailureAction }}
+
+⚠️  global.validationFailureAction="{{ .Values.global.validationFailureAction }}" está
+    sobrescribiendo el modo definido individualmente en cada política.
+{{- end }}
+
+Verifica el estado de las políticas con:
+  kubectl get clusterpolicy
+  kubectl get policy -n {{ .Values.policies.cosignVerifyImages.namespace | default .Release.Namespace }}
+  kubectl get cpol,pol -o wide

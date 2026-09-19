@@ -1,0 +1,9 @@
+# Patrones a ignorar al empaquetar el chart.
+.git/
+.gitignore
+.vscode/
+*.swp
+*.bak
+*.tmp
+*.orig
+.DS_Store

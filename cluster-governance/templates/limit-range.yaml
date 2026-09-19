@@ -1,0 +1,16 @@
+{{- if .Values.limitRange.enabled }}
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: {{ include "cluster-governance.fullname" . }}-limits
+  namespace: {{ include "cluster-governance.namespaceName" . }}
+  labels:
+    {{- include "cluster-governance.labels" . | nindent 4 }}
+  {{- with .Values.commonAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  limits:
+    {{- toYaml .Values.limitRange.limits | nindent 4 }}
+{{- end }}
