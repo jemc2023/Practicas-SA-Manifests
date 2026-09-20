@@ -8,10 +8,10 @@ spec:
   skipImmediately: false
   template:
     includedNamespaces:
-      - {{ include "cluster-governance.namespaceName" . }}
+      - {{ include "cluster-governance.namespaceName" . | quote }}
     includedResources:
       - persistentvolumeclaims
       - persistentvolumes
-    ttl: {{ .Values.velero.ttl | default "720h0m0s" }}
+    ttl: {{ .Values.velero.ttl | default "720h0m0s" | quote }}
     includeClusterResources: true
     snapshotVolumes: true
