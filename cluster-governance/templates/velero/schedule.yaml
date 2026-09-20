@@ -5,7 +5,7 @@ metadata:
   namespace: velero
 spec:
   schedule: {{ required "velero.schedule es obligatorio" .Values.velero.schedule | quote }}
-  skipImmediate: false
+  skipImmediately: false
   template:
     includedNamespaces:
       - {{ include "cluster-governance.namespaceName" . }}
