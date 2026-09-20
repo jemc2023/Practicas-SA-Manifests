@@ -28,8 +28,6 @@ spec:
             - name: default
               provider: gcp
               bucket: "202300636-velero-backups"
-              config:
-                serviceAccount: "velero-backups-sa@project-613deddb-cfff-4117-851.iam.gserviceaccount.com"
           volumeSnapshotLocation:
             - name: default
               provider: gcp
