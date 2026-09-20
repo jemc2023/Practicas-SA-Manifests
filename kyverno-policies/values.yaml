@@ -26,11 +26,14 @@ policies:
       - kyverno
       - kube-system
       - argo-rollouts
+      - velero
 
   requireRunAsNonRoot:
     enabled: true
     validationFailureAction: Enforce
     background: true
+    excludeNamespaces:
+      - velero
 
   cosignVerifyImages:
     enabled: true

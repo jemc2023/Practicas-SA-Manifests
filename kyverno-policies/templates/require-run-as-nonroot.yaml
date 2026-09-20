@@ -28,6 +28,13 @@ spec:
           - resources:
               kinds:
                 - Pod
+      {{- if .Values.policies.requireRunAsNonRoot.excludeNamespaces }}
+      exclude:
+        any:
+          - resources:
+              namespaces:
+                {{- toYaml .Values.policies.requireRunAsNonRoot.excludeNamespaces | nindent 16 }}
+      {{- end }}
       validate:
         message: "Los contenedores no pueden ejecutarse como root. Define securityContext.runAsNonRoot: true a nivel de Pod o de cada contenedor."
         anyPattern:
