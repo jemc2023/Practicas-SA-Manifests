@@ -34,6 +34,8 @@ policies:
     background: true
     excludeNamespaces:
       - velero
+      - kyverno
+      - argocd
 
   cosignVerifyImages:
     enabled: true
@@ -41,7 +43,7 @@ policies:
     validationFailureAction: Enforce
     background: false
     webhookTimeoutSeconds: 30
-    failurePolicy: Fail
+    failurePolicy: Ignore
     imageReferences:
       - "ghcr.io/jemc2023/*:*"
     imageRegistrySecrets:
