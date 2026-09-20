@@ -19,6 +19,13 @@ spec:
           - name: velero-plugin-for-gcp
             image: velero/velero-plugin-for-gcp:v1.14.0
             imagePullPolicy: IfNotPresent
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                cpu: 500m
+                memory: 512Mi
             volumeMounts:
               - mountPath: /target
                 name: plugins
