@@ -72,3 +72,7 @@ rbac:
       - apiGroups: [""]
         resources: ["pods"]
         verbs: ["get", "list", "watch"]
+
+velero:
+  schedule: "0 2 * * *"
+  ttl: "720h0m0s"

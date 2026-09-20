@@ -1,0 +1,17 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: pvc-backups
+  namespace: velero
+spec:
+  schedule: {{ required "velero.schedule es obligatorio" .Values.velero.schedule | quote }}
+  skipImmediate: false
+  template:
+    includedNamespaces:
+      - {{ include "cluster-governance.namespaceName" . }}
+    includedResources:
+      - persistentvolumeclaims
+      - persistentvolumes
+    ttl: {{ .Values.velero.ttl | default "720h0m0s" }}
+    includeClusterResources: true
+    snapshotVolumes: true
