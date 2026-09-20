@@ -74,5 +74,5 @@ rbac:
         verbs: ["get", "list", "watch"]
 
 velero:
-  schedule: "*/2 * * * *"
+  schedule: "0 2 * * *"
   ttl: "720h0m0s"
