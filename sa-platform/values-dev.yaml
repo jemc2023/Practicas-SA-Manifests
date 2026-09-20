@@ -29,7 +29,7 @@ nats:
         pvc:
           size: 1Gi
 
-auditlogs-db:
+audit-logs-db:
   replicaCount: 1
   resources:
     requests:

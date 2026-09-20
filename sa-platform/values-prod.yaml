@@ -31,7 +31,7 @@ nats:
           size: 10Gi
           storageClass: "fast-rwo"
 
-auditlogs-db:
+audit-logs-db:
   architecture: replicaset
   replicaCount: 3
   persistence:

@@ -48,7 +48,7 @@ secretEnv: {}
 
 db:
   envKey: AUDIT_LOGS_DB_URI
-  uri: sa-platform-auditlogs-db-headless
+  uri: sa-platform-audit-logs-db-headless
 
 networkPolicy:
   enabled: true
@@ -61,6 +61,6 @@ networkPolicy:
         app.kubernetes.io/component: nats
       port: 4222
     - selector:
-        app.kubernetes.io/name: auditlogs-db
+        app.kubernetes.io/name: audit-logs-db
         app.kubernetes.io/instance: sa-platform
       port: 27017

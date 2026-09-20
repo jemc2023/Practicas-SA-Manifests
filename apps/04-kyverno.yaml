@@ -21,6 +21,8 @@ spec:
           value: "false"
         - name: config.failurePolicy
           value: "Ignore"
+        - name: admissionController.failurePolicy
+          value: "Ignore"
         - name: webhooksCleanup.enabled
           value: "true"
   destination:

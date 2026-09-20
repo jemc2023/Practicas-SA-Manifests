@@ -104,7 +104,7 @@ nats:
   reloader:
     enabled: false
 
-auditlogs-db:
+audit-logs-db:
   enabled: true
   namespaceOverride: sa-p5
   architecture: replicaset

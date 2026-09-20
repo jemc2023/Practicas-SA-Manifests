@@ -12,10 +12,10 @@ dependencies:
     repository: "https://nats-io.github.io/k8s/helm/charts/"
     condition: nats.enabled
   - name: mongodb
-    alias: auditlogs-db
+    alias: audit-logs-db
     version: "19.1.36"
     repository: "oci://registry-1.docker.io/bitnamicharts"
-    condition: auditlogs-db.enabled
+    condition: audit-logs-db.enabled
   - name: mongodb
     alias: users-identity-db
     version: "19.1.36"
