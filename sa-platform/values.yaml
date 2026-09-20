@@ -217,7 +217,7 @@ interactions-db:
       memory: 512Mi
 
 audit-logs:
-  replicaCount: 1
+  replicaCount: 2
   revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/audit-logs
@@ -231,14 +231,14 @@ audit-logs:
       cpu: 300m
       memory: 512Mi
   autoscaling:
-    minReplicas: 1
-    maxReplicas: 2
+    minReplicas: 2
+    maxReplicas: 3
   db:
     uri: "AgArX0rMVWb+rHh12cXsdNYwKsh3q+9nWEvx9hrpPbLIwnmgP7lujYSaQeUjPnk8DIq5kRmA4Di1rw9PHlLQeMnJ3LLU5SDhBofyQuPBV0G0z0Qe25nToDg2zCGrJJ2B/SjegWZ+/vosihrN7prtjIYsQPevhFyAYzvwro832dq+5Eh0dSfMS8GE1LV5aBB20Ut+owqWcN5debzhZkpFeclpFDnbWK1AMTrZ5bj0WDSNuKZ0Yi8163/yVryx5MPmsSCzuFDvp2039JYmhfpB2Q6ZcM4Qf2LsYlM9a0DJFHYFyvWAKknmWTq00X1EsFAEVjN5sVaL85fiNtvChxmNzyZts2OTgdG+k0n9f3yRQPyN5gpHPKiABew73vVtbRkrW9+kbFPUnnMSpUZauWt43DQYDvlf9qOfGwuZGrpDc4M3ZM4Ka5+ffZlATl5TYWvnzoUDmUNbs/NVs9bpHWDc9ilDNb3nZdZIXnoIJ213MtbEg94qpPDxjMJl7BvMqNGe7Ul3z2Wl0Xqoce1lZO1kKZi7Px/cV5dtgVnCU+NU8+NJbWNF3Dz2Z3HLw8KB2rgKLZJngyixoF/23YyvpPu7Vr4ZOHAQCmdVBPErh6OAQCb4cc38Br4LhOGzvuaB7IFQ8j02gOdnjTe9USuJf8j4gYBNUsWgSaVxLwEueACG+/AfsUWLaUvL4Uf8liQo7ZM3nw96Ov4uEnwjJo1wbYE9x8L/z5gTRprlymj5xNlpv296W1hTUFhk+6uO91GC1OQ0SiQghT83shNZuQZe8HQo3yHfhxp/59ZXbZtTae+8oZA8V9Mxcaq6NIJgwo/3CKFXaklu4kVkE5JgmQbaGtJV"
     port: 27017
 
 users-identity:
-  replicaCount: 1
+  replicaCount: 2
   revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/users-identity
@@ -252,8 +252,8 @@ users-identity:
       cpu: 300m
       memory: 512Mi
   autoscaling:
-    minReplicas: 1
-    maxReplicas: 2
+    minReplicas: 2
+    maxReplicas: 3
   secretEnv:
     JWT_SECRET: "AgBamDRLX6IARkkFN5oTD2qtgShsfqUnRiBqBvu/Ou/PVv6wtmGAA2B9y6TVlXbPfI8WGXuqhkWZkpImhZ7wSR78PuJCJpY0DIMo7drhSZDEG6Ud1odlJZ3KCTWpbvo+XE9jJMxShKaPzOxBuCpxpxDmQM7wGUroBCCFTDReYmf6/qRDsXTrtmV/zTB2FeroURujCLVf+jSYK+h6B8+zx2V2ti14UOHR9SMJzcRUtZ4/i/KM0sREPbZxQ4V13ur2XgV82vCagvqoDX3lkDxR7ToMSwT4hFOFVN/cNTpJD9IJut4qyA5HMR8Savr9U9x3LK7ECyPVwxQjqujiI7/CsjqmZjwy+WLN8toCrFunxL3uIOh64mPO4PPe3H6i+4lAOpDRJrYCkNpx6rdNbsTOz2/szd3KTrIcxUo8CNkIXmGrLDnd2tZj3wSOmYe59RiWfpOSZbyApHqquYUehuFvTcA9ElGYZYmQ7PZI/IPgPWletFrsYBtKlkFp1/O1oDgSsYHxcBUYNMBQR5hqedfmvuJEoIqEQYNr9kFdIuEuUA3f68QE2OHKwyNowJhaakPwAbs83ira7076LqbzqIiP9hIE3qlJUeCiZ1uiD4ZPPIlUAz82nlOWCwWCv+Z2zQR5QCq4bvdXMNHjvlu05h8F1JXYeMu1eITVEEIVcRU4y2D/HSOQjwqRESZkRbhIbE1V9HVQoL+JuJhXuX0457jWAD0yhxG4N2psrw=="
   db:
@@ -261,7 +261,7 @@ users-identity:
     port: 27017
 
 api-gateway:
-  replicaCount: 1
+  replicaCount: 2
   revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/api-gateway
@@ -275,13 +275,13 @@ api-gateway:
       cpu: 300m
       memory: 512Mi
   autoscaling:
-    minReplicas: 1
-    maxReplicas: 2
+    minReplicas: 2
+    maxReplicas: 3
   secretEnv:
     JWT_SECRET: "AgCTqbMRMry0mkH4ceuuBPaAnGOy/mAbQnuSus99wo/475KRWIzDPWsICdxFivg8ETRFgNkJoOtreN8U9jatscM2NSokREtINchqgASQ431SOrGK9juTFaHQ5fGFCsFsUbvfBHQ5Efk3KUZtjJTUEQjHmJOgs0G53A3Bb0pT0I8l24/tG6a1XLX+zKNtCcx4h2FiW5GBLXVK5u4+v2Ba9LgJpG/X3Rqxgj3GBnBWNbYXucKhONIIR4TdYG5GSJS3Y7N3MUc073+a1KDu9mRMzvjWO4I/jdxsnOO74kQyS0SdHRr9SJuRlsVtWJk/ob+/MAzcBuz4DUT/DHJgx8A02tqgWbwLv5KCmWWCORtgQCNRvnm+Xy0OKe+iLGUAa8hxVJ3Fb8RQ2k3XKlQw2jWRvehI7YyJEyttzuoSHYEujE9F9m7/+ozrsrWoXk2XP4QGfCp3LEkBMEWjPCGPPCufl2ectCp3ck566TqyinQCIarlX2jKUpX9yFiPnRWnlFKEO2Ba7nX5k2kaWUZL6XJPTKLjaaCAeaPInRGXrCPF/NK3stDSINV6OBAph+sFisveSlB9Yb7oiE4RY6D7CzNocNEmBTjLeZamsXJuG24JkH+Jdq6GRWoA89b4ol+X72RfJiFGtkf8zhBAUEQSicNzpKuTsJDCM9OTktxURKiL4e92y4bdg9ond4+07eiliwyj1m7DOxtj4MuVUG+65j1rT+CUNWb6rl66Pg=="
 
 products:
-  replicaCount: 1
+  replicaCount: 2
   revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/products
@@ -295,14 +295,14 @@ products:
       cpu: 300m
       memory: 512Mi
   autoscaling:
-    minReplicas: 1
-    maxReplicas: 2
+    minReplicas: 2
+    maxReplicas: 3
   db:
     uri: "AgAKxIWqk4mINUkD1cSS0QP6D6XApLDf4Gp9r4e+L+S23zaDzP8YzHXlknEakPB3RWABIj5G4tePGykkU2EqV47VyHg8oo8JFtVOI3Q6f4raVRLDa/TRNie7PrwDiRLk0VelGDKPdvoMT4RUnpHCKVP8MkCOKCLM5kQC7lOp/JdCgnfDIXB+oVRZI2JbOaVsXMDKpBB2XjRAWlK+Zg3Cdb6L0swlGLYiJbxbdjHCvui4zbj1CYqZDLLKpN5b5P/hPInJtiTJEBwAuWyrxyDIrivvrz/EmuqTjGlSeEAExpw+1Jg2YP5miJzVexhxYOG1kouYm0jmWKMHl5ZDo+uBEkm+GGD31fRUfvRNQFZ0q/bA2V9VC5u3YD7EJrv1AYZ1aiHNyHcE64g37cjFEJG3RQ2zI5nvMvvzGoBzcFrTgfWkyoGOUlJRf2kOTECdrhH2QF4wOm80o/50Pc/1Zw5Tr1nqaB3t2P9EsqCn8Mlq5hgiSttMP3KBTDNj/NcZRFQ7UCdqSVbpyEZtvwCGeRJehUxqFRbBa1+RNvMOhUlMrb73193ePtOJkRp9lToj0uUXRVCixy/EE1tT5N6NrDp3EdU038ORdDRXj9OHGewnHXZCH/EpMxSFwTghvN8uxgtp3mt3Hzgf1fp8cQQ3nOpC0DpKEC0911gi5IOM1U8zVFfUDFg+hV90f6nn/2lHJ3U0sF04X74IrSB6ZdJdmvFJEKNu7279jMOfBzF1RdM4D6ChF2z2oguE3feiNPg8USCJz5hBSK9XU8ww9vdebp2yHN/LNOmwS4RsWk0JNxE9K229A85Irl6tj3eVfVL9faJRu2+TjbDzyKFuHpNP"
     port: 27017
 
 interactions:
-  replicaCount: 1
+  replicaCount: 2
   revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/interactions
@@ -316,8 +316,8 @@ interactions:
       cpu: 300m
       memory: 512Mi
   autoscaling:
-    minReplicas: 1
-    maxReplicas: 2
+    minReplicas: 2
+    maxReplicas: 3
 
   db:
     uri: "AgBKiXF09dEwW8ZpAIANlIM0s3PdNk5s2snbm0xxNu6MCdTfDyLwM8I8GRjKukrfEGiiUcEFZGZVsu2WHtEyaWXBFdhsaXjG5OBqLTv5Kp2RNbmMrS0YR2F/x5ocr177Eem3YAPdWHR2YtPVfIHif1y2xICHMgEy8RMygFI9bAjCTkiASU9efwU019cMCPV7xfEQ+VfgTF1cLH6J+7g+5MyOCGGr9BCfSdR0NUjYE9l39u7djd0KpuBRbJULbbEJWsLmv64h60r1V5cT7H2pY/Q31K6do38SJESPxWYtI6+W+WchKpe0JgMxgxryec1OLKBgFeaxh+DgynqXk5qZdb3a9rVBnLnrCosFLjV9peTKXDpBYQzVky+EeQ1Wbn1Sh7BXGngk+BAh6Gq2n+RgsSKprdzNHAvReRijNYkcvyE4PzXlm/jsO55QKwgegCZh21LfZijFNDCCDpFbQ575R8FM1LlbICjaER1xGNq+HTDXwr23HWM/7QKK2hqZ4WFK7oh5MZezUcptqexvx8kDhvKe6jFaMrQT/0+R5L2hGREH747yTph+/w1HH0KlcwEERZoVMshxkxuukPI9OCOV4UYUwDkt3RfvdXNV+NI3Gesq7Sov8hFAO3877y7m8OB3qDZBMCRSNgAqC5fX2l00spI5X5cibxgmPQ32niw4XDLfomx9v7byffcoi0T0T9ap8JqVdDmTOshskiJKOJZWf+mHJ6zOqiz7Ik+bJPL5Br3Z7mRKSOTQTO5ZKSp67EjirYydSIHrRjP1AvjbL3/MAfl9hwJrRlkGAm5DLEHo2D+CbAtEmfQrbTO35IY/2DMQv5+UIuFeCv+ILS2cAROmQr2+oI0="

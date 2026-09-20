@@ -29,6 +29,17 @@ spec:
       labels:
         {{- include "sa-platform.selectorLabels" . | nindent 8 }}
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - {{ .Chart.Name }}
+              topologyKey: kubernetes.io/hostname
+
       serviceAccountName: {{ .Chart.Name }}-sa
       securityContext:
         runAsNonRoot: true
