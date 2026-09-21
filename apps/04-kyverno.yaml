@@ -35,6 +35,14 @@ spec:
       jsonPointers:
         - /metadata/annotations
         - /metadata/labels
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /status
+    - group: apps
+      kind: StatefulSet
+      jsonPointers:
+        - /status
 
   syncPolicy:
     automated:
