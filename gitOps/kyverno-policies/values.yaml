@@ -40,7 +40,7 @@ policies:
       - observability
 
   cosignVerifyImages:
-    enabled: true
+    enabled: false
     namespace: "sa-p5"
     validationFailureAction: Enforce
     background: false

@@ -242,7 +242,7 @@ users-identity:
   revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/users-identity
-    tag: *tag_val
+    tag: v1.10.0
   logLevel: info
   resources:
     requests:
@@ -254,6 +254,11 @@ users-identity:
   autoscaling:
     minReplicas: 2
     maxReplicas: 3
+  env:
+    NODE_ENV: "prod"
+    APP_VERSION: *tag_val
+    SERVICE_NAME: "users-identity"
+    OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector-gateway.observability.svc.cluster.local:4317"
   secretEnv:
     JWT_SECRET: "AgBamDRLX6IARkkFN5oTD2qtgShsfqUnRiBqBvu/Ou/PVv6wtmGAA2B9y6TVlXbPfI8WGXuqhkWZkpImhZ7wSR78PuJCJpY0DIMo7drhSZDEG6Ud1odlJZ3KCTWpbvo+XE9jJMxShKaPzOxBuCpxpxDmQM7wGUroBCCFTDReYmf6/qRDsXTrtmV/zTB2FeroURujCLVf+jSYK+h6B8+zx2V2ti14UOHR9SMJzcRUtZ4/i/KM0sREPbZxQ4V13ur2XgV82vCagvqoDX3lkDxR7ToMSwT4hFOFVN/cNTpJD9IJut4qyA5HMR8Savr9U9x3LK7ECyPVwxQjqujiI7/CsjqmZjwy+WLN8toCrFunxL3uIOh64mPO4PPe3H6i+4lAOpDRJrYCkNpx6rdNbsTOz2/szd3KTrIcxUo8CNkIXmGrLDnd2tZj3wSOmYe59RiWfpOSZbyApHqquYUehuFvTcA9ElGYZYmQ7PZI/IPgPWletFrsYBtKlkFp1/O1oDgSsYHxcBUYNMBQR5hqedfmvuJEoIqEQYNr9kFdIuEuUA3f68QE2OHKwyNowJhaakPwAbs83ira7076LqbzqIiP9hIE3qlJUeCiZ1uiD4ZPPIlUAz82nlOWCwWCv+Z2zQR5QCq4bvdXMNHjvlu05h8F1JXYeMu1eITVEEIVcRU4y2D/HSOQjwqRESZkRbhIbE1V9HVQoL+JuJhXuX0457jWAD0yhxG4N2psrw=="
   db:
