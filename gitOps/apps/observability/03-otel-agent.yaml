@@ -1,0 +1,73 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: obs-otel-agent
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://open-telemetry.github.io/opentelemetry-helm-charts
+    chart: opentelemetry-collector
+    targetRevision: 0.175.1
+    helm:
+      releaseName: otel-collector
+      valuesObject:
+        # agent: logs de stdout
+        fullnameOverride: otel-collector
+        mode: daemonset
+        image:
+          repository: otel/opentelemetry-collector-k8s
+        presets:
+          logsCollection:
+            enabled: true
+            includeCollectorLogs: false
+          kubernetesAttributes:
+            enabled: true
+        config:
+          extensions:
+            health_check:
+              endpoint: ${env:MY_POD_IP}:13133
+          processors:
+            transform/logs:
+              error_mode: ignore
+              log_statements:
+                - context: log
+                  statements:
+                    - merge_maps(cache, ParseJSON(body), "upsert") where IsString(body) and IsMatch(body, "^\\s*\\{")
+                    - set(attributes["version"], cache["version"]) where cache["version"] != nil
+                    - set(attributes["environment"], cache["environment"]) where cache["environment"] != nil
+                    - set(resource.attributes["service.name"], cache["serviceName"]) where cache["serviceName"] != nil
+                    - set(severity_text, cache["level"]) where cache["level"] != nil
+                    - set(trace_id.string, cache["traceId"]) where cache["traceId"] != nil
+                    - set(span_id.string, cache["spanId"]) where cache["spanId"] != nil
+          exporters:
+            otlphttp/loki:
+              endpoint: http://loki-gateway/otlp
+              tls:
+                insecure: true
+          service:
+            pipelines:
+              logs:
+                receivers: [filelog]
+                processors:
+                  [memory_limiter, k8sattributes, transform/logs, batch]
+                exporters: [otlphttp/loki]
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 2
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m

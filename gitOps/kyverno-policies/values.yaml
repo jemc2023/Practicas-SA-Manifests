@@ -27,6 +27,7 @@ policies:
       - kube-system
       - argo-rollouts
       - velero
+      - observability
 
   requireRunAsNonRoot:
     enabled: true
@@ -36,6 +37,7 @@ policies:
       - velero
       - kyverno
       - argocd
+      - observability
 
   cosignVerifyImages:
     enabled: true

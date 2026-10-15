@@ -12,7 +12,7 @@ spec:
   source:
     repoURL: https://github.com/jemc2023/Practicas-SA-Manifests.git
     targetRevision: master
-    path: sa-platform
+    path: gitOps/sa-platform
     helm:
       valueFiles:
         - values.yaml

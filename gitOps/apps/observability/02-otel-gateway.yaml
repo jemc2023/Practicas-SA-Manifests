@@ -1,0 +1,85 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: obs-otel-gateway
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://open-telemetry.github.io/opentelemetry-helm-charts
+    chart: opentelemetry-collector
+    targetRevision: 0.175.1
+    helm:
+      releaseName: otel-collector-gateway
+      valuesObject:
+        # gateway: trazas + métricas
+        fullnameOverride: otel-collector-gateway
+        mode: deployment
+        replicaCount: 1
+        image:
+          repository: otel/opentelemetry-collector-k8s
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            memory: 256Mi
+        presets:
+          kubernetesAttributes:
+            enabled: true
+        config:
+          extensions:
+            health_check:
+              endpoint: ${env:MY_POD_IP}:13133
+          receivers:
+            otlp:
+              protocols:
+                grpc:
+                  endpoint: ${env:MY_POD_IP}:4317
+                # http:
+                #   endpoint: ${env:MY_POD_IP}:4318
+          processors:
+            memory_limiter:
+              check_interval: 5s
+              limit_percentage: 80
+              spike_limit_percentage: 25
+            batch: {}
+          exporters:
+            otlp/tempo:
+              endpoint: tempo:4317
+              tls:
+                insecure: true
+            otlphttp/prometheus:
+              endpoint: http://prometheus-server/api/v1/otlp
+              tls:
+                insecure: true
+          service:
+            extensions: [health_check]
+            pipelines:
+              traces:
+                receivers: [otlp]
+                processors: [memory_limiter, k8sattributes, batch]
+                exporters: [otlp/tempo]
+              metrics:
+                receivers: [otlp]
+                processors: [memory_limiter, k8sattributes, batch]
+                exporters: [otlphttp/prometheus]
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 2
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m

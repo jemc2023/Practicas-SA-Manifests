@@ -1,0 +1,63 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: obs-tempo
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://grafana-community.github.io/helm-charts
+    chart: tempo
+    targetRevision: 2.4.0
+    helm:
+      releaseName: tempo
+      valuesObject:
+        fullnameOverride: tempo
+        persistence:
+          enabled: true
+          size: 10Gi
+        tempo:
+          storage:
+            trace:
+              backend: local
+              local:
+                path: /var/tempo/traces
+              wal:
+                path: /var/tempo/wal
+          metricsGenerator:
+            enabled: true
+            remoteWriteUrl: "http://prometheus-server/api/v1/write"
+            processor:
+              local_blocks:
+                filter_server_spans: false
+                flush_to_storage: true
+            storage:
+              path: /var/tempo/generator/wal
+            traces_storage:
+              path: /var/tempo/generator/traces
+          overrides:
+            defaults:
+              metrics_generator:
+                processors:
+                  - local-blocks
+                  - service-graphs
+                  - span-metrics
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 2
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m

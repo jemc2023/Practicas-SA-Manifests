@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: obs-prometheus
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: prometheus
+    targetRevision: 29.36.0
+    helm:
+      releaseName: prometheus
+      valuesObject:
+        server:
+          fullnameOverride: prometheus-server
+          retention: 15d
+          extraArgs:
+            # Valor vacío => se renderiza como flag sin valor (--web.enable-...)
+            web.enable-otlp-receiver: ""
+            web.enable-remote-write-receiver: ""
+          otlp:
+            promote_resource_attributes:
+              - k8s.namespace.name
+              - k8s.deployment.name
+              - k8s.node.name
+          persistentVolume:
+            enabled: true
+            size: 10Gi
+        alertmanager:
+          enabled: true
+        prometheus-pushgateway:
+          enabled: false
+        prometheus-node-exporter:
+          fullnameOverride: prometheus-node-exporter
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 2
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
