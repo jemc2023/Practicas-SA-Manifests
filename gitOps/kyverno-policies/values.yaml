@@ -40,14 +40,14 @@ policies:
       - observability
 
   cosignVerifyImages:
-    enabled: false
+    enabled: true
     namespace: "sa-p5"
     validationFailureAction: Enforce
     background: false
     webhookTimeoutSeconds: 30
     failurePolicy: Ignore
     imageReferences:
-      - "ghcr.io/jemc2023/*:*"
+      - "ghcr.io/jemc2024/*:*"
     imageRegistrySecrets:
       - ghcr-secret
     attestorCount: 1
