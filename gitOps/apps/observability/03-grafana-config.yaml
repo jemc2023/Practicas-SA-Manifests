@@ -12,7 +12,7 @@ spec:
   source:
     repoURL: https://github.com/jemc2023/Practicas-SA-Manifests.git
     targetRevision: master
-    path: gitOps/observability/grafana-config
+    path: gitOps/grafana-config
     helm:
       releaseName: grafana-config
       valueFiles:
