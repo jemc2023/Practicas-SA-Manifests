@@ -1,0 +1,6 @@
+global:
+  namespace: observability
+
+dashboards:
+  # Carpeta de Grafana para los JSON que estén directamente en dashboards/
+  defaultFolder: SA

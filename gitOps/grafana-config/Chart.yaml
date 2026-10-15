@@ -1,0 +1,6 @@
+apiVersion: v2
+name: grafana-config
+description: Datasources y dashboards de Grafana (provisionados vía sidecar con ConfigMaps)
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
