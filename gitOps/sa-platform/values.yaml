@@ -241,7 +241,7 @@ users-identity:
   replicaCount: 2
   revisionHistoryLimit: 1
   image:
-    repository: ghcr.io/jemc2023/users-identity
+    repository: ghcr.io/jemc2023/users-identity-service
     tag: v1.10.0
   logLevel: info
   resources:
