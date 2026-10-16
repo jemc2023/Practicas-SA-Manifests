@@ -23,9 +23,9 @@ resourceQuota:
     requests.memory: 8Gi
     limits.cpu: "10"
     limits.memory: 24Gi
-    pods: "180"
-    persistentvolumeclaims: "80"
-    services: "40"
+    pods: "220"
+    persistentvolumeclaims: "100"
+    services: "50"
 
 limitRange:
   enabled: true
