@@ -24,7 +24,7 @@ resourceQuota:
     limits.cpu: "10"
     limits.memory: 28Gi
     pods: "220"
-    persistentvolumeclaims: "100"
+    persistentvolumeclaims: "120"
     services: "50"
 
 limitRange:
