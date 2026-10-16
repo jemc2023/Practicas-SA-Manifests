@@ -266,11 +266,11 @@ users-identity:
     port: 27017
 
 api-gateway:
-  replicaCount: 2
+  replicaCount: 1
   revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/api-gateway
-    tag: v1.10.2
+    tag: v1.10.3
   logLevel: info
   resources:
     requests:
@@ -280,7 +280,7 @@ api-gateway:
       cpu: 300m
       memory: 512Mi
   autoscaling:
-    minReplicas: 2
+    minReplicas: 1
     maxReplicas: 3
   env:
     NODE_ENV: "prod"
