@@ -291,7 +291,7 @@ api-gateway:
     JWT_SECRET: "AgCTqbMRMry0mkH4ceuuBPaAnGOy/mAbQnuSus99wo/475KRWIzDPWsICdxFivg8ETRFgNkJoOtreN8U9jatscM2NSokREtINchqgASQ431SOrGK9juTFaHQ5fGFCsFsUbvfBHQ5Efk3KUZtjJTUEQjHmJOgs0G53A3Bb0pT0I8l24/tG6a1XLX+zKNtCcx4h2FiW5GBLXVK5u4+v2Ba9LgJpG/X3Rqxgj3GBnBWNbYXucKhONIIR4TdYG5GSJS3Y7N3MUc073+a1KDu9mRMzvjWO4I/jdxsnOO74kQyS0SdHRr9SJuRlsVtWJk/ob+/MAzcBuz4DUT/DHJgx8A02tqgWbwLv5KCmWWCORtgQCNRvnm+Xy0OKe+iLGUAa8hxVJ3Fb8RQ2k3XKlQw2jWRvehI7YyJEyttzuoSHYEujE9F9m7/+ozrsrWoXk2XP4QGfCp3LEkBMEWjPCGPPCufl2ectCp3ck566TqyinQCIarlX2jKUpX9yFiPnRWnlFKEO2Ba7nX5k2kaWUZL6XJPTKLjaaCAeaPInRGXrCPF/NK3stDSINV6OBAph+sFisveSlB9Yb7oiE4RY6D7CzNocNEmBTjLeZamsXJuG24JkH+Jdq6GRWoA89b4ol+X72RfJiFGtkf8zhBAUEQSicNzpKuTsJDCM9OTktxURKiL4e92y4bdg9ond4+07eiliwyj1m7DOxtj4MuVUG+65j1rT+CUNWb6rl66Pg=="
 
 products:
-  replicaCount: 2
+  replicaCount: 1
   revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/products
@@ -305,7 +305,7 @@ products:
       cpu: 300m
       memory: 512Mi
   autoscaling:
-    minReplicas: 2
+    minReplicas: 1
     maxReplicas: 3
   env:
     NODE_ENV: "prod"
@@ -317,7 +317,7 @@ products:
     port: 27017
 
 interactions:
-  replicaCount: 2
+  replicaCount: 1
   revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/interactions
@@ -331,7 +331,7 @@ interactions:
       cpu: 300m
       memory: 512Mi
   autoscaling:
-    minReplicas: 2
+    minReplicas: 1
     maxReplicas: 3
   env:
     NODE_ENV: "prod"
