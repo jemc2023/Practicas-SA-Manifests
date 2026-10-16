@@ -22,7 +22,7 @@ resourceQuota:
     requests.cpu: "3.5"
     requests.memory: 8Gi
     limits.cpu: "10"
-    limits.memory: 24Gi
+    limits.memory: 28Gi
     pods: "220"
     persistentvolumeclaims: "100"
     services: "50"
