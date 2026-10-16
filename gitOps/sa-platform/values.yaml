@@ -270,7 +270,7 @@ api-gateway:
   revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/api-gateway
-    tag: v1.10.1
+    tag: v1.10.0
   logLevel: info
   resources:
     requests:
