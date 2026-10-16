@@ -130,7 +130,7 @@ audit-logs-db:
       memory: 256Mi
     limits:
       cpu: 500m
-      memory: 512Mi
+      memory: 712Mi
 
 users-identity-db:
   enabled: true
