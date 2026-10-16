@@ -33,6 +33,63 @@ spec:
             size: 10Gi
         alertmanager:
           enabled: true
+          persistence:
+            enabled: true
+            size: 1Gi
+          extraSecretMounts:
+            - name: resend-smtp
+              mountPath: /etc/secrets/resend
+              secretName: resend-smtp
+              readOnly: true
+          config:
+            global:
+              smtp_smarthost: "smtp.resend.com:587"
+              smtp_from: "alertas@tudominio.com"
+              smtp_auth_username: "resend"
+              smtp_auth_password_file: /etc/secrets/resend/api-key
+              smtp_require_tls: true
+            route:
+              receiver: email-equipo
+              group_by: ["alertname", "namespace"]
+              group_wait: 30s
+              group_interval: 5m
+              repeat_interval: 4h
+            receivers:
+              - name: email-equipo
+                email_configs:
+                  - to: "2988821320101@ingenieria.usac.edu.gt"
+                    send_resolved: true
+        serverFiles:
+          alerting_rules.yml:
+            groups:
+              - name: basicas
+                rules:
+                  - alert: Presupuesto de Error de Disponibilidad
+                    expr: (sum(rate(http_server_request_duration_seconds_count{job="sa-p5/api-gateway",http_response_status_code=~"4.."}[1h]))/sum(rate(http_server_request_duration_seconds_count{job="sa-p5/api-gateway"}[1h])))>(14.4 * (1 - 0.99))
+                    for: 2m
+                    labels:
+                      severity: critical
+                    annotations:
+                      summary: "El presupuesto de error de disponibilidad ha sido excedido: {{ $labels.job }}"
+                      description: "{{ $labels.instance }} lleva más de 2 minutos sin responder."
+
+                  - alert: Presupuesto de Error de Latencia
+                    expr: (sum(increase(contador_de_ejemplo_total[5m])) > 10)
+                    for: 2m
+                    labels:
+                      severity: critical
+                    annotations:
+                      summary: "El presupuesto de error de latencia ha sido excedido: {{ $labels.job }}"
+                      description: "{{ $labels.instance }} lleva más de 2 minutos con latencia alta."
+
+                  - alert: Alerta de prueba
+                    expr:
+                    for: 1m
+                    labels:
+                      severity: warning
+                    annotations:
+                      summary: "Alerta de prueba: {{ $labels.job }}"
+                      description: "{{ $labels.instance }} lleva más de 1 minuto con un problema."
         prometheus-pushgateway:
           enabled: false
         prometheus-node-exporter:

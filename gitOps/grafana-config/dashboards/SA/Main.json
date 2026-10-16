@@ -4,18 +4,23 @@
 	"metadata": {
 		"name": "adqhg7f",
 		"namespace": "default",
-		"uid": "543eb2b0-8e0d-4a65-9f07-185e9241f77a",
-		"resourceVersion": "1792127746734005",
-		"generation": 16,
-		"creationTimestamp": "2026-10-16T04:15:02Z",
+		"uid": "da75c73c-ae0b-463d-a423-48729ce828f2",
+		"resourceVersion": "1792180350450007",
+		"generation": 1,
+		"creationTimestamp": "2026-10-16T19:52:30Z",
 		"labels": {
-			"grafana.app/deprecatedInternalID": "3262976530751488"
+			"grafana.app/deprecatedInternalID": "3498897441058816"
 		},
 		"annotations": {
-			"grafana.app/createdBy": "user:cg1bphrrzvlz4b",
-			"grafana.app/saved-from-ui": "Grafana v13.2.3 (90ffed056f)",
-			"grafana.app/updatedBy": "user:cg1bphrrzvlz4b",
-			"grafana.app/updatedTimestamp": "2026-10-16T05:15:46Z"
+			"grafana.app/createdBy": "access-policy:service",
+			"grafana.app/folder": "eg1fk3ko22sqod",
+			"grafana.app/managedBy": "classic-file-provisioning",
+			"grafana.app/managerId": "sidecarProvider",
+			"grafana.app/sourceChecksum": "2c494dadb275bac24184b39cbd1bdfb8",
+			"grafana.app/sourcePath": "/tmp/dashboards/SA/demo.json",
+			"grafana.app/sourceTimestamp": "1792180275000",
+			"grafana.app/folderTitle": "SA",
+			"grafana.app/folderUrl": "/dashboards/f/eg1fk3ko22sqod/sa"
 		}
 	},
 	"spec": {
@@ -23,20 +28,20 @@
 			{
 				"kind": "AnnotationQuery",
 				"spec": {
-					"query": {
-						"kind": "DataQuery",
-						"group": "grafana",
-						"version": "v0",
-						"datasource": {
-							"name": "-- Grafana --"
-						},
-						"spec": {}
-					},
+					"builtIn": true,
 					"enable": true,
 					"hide": true,
 					"iconColor": "rgba(0, 211, 255, 1)",
 					"name": "Annotations & Alerts",
-					"builtIn": true
+					"query": {
+						"datasource": {
+							"name": "-- Grafana --"
+						},
+						"group": "grafana",
+						"kind": "DataQuery",
+						"spec": {},
+						"version": "v0"
+					}
 				}
 			}
 		],
@@ -46,10 +51,6 @@
 			"panel-1": {
 				"kind": "Panel",
 				"spec": {
-					"id": 1,
-					"title": "Traffic",
-					"description": "",
-					"links": [],
 					"data": {
 						"kind": "QueryGroup",
 						"spec": {
@@ -57,34 +58,59 @@
 								{
 									"kind": "PanelQuery",
 									"spec": {
+										"hidden": false,
 										"query": {
-											"kind": "DataQuery",
-											"group": "prometheus",
-											"version": "v0",
 											"datasource": {
 												"name": "prometheus"
 											},
+											"group": "prometheus",
+											"kind": "DataQuery",
 											"spec": {
 												"editorMode": "code",
 												"expr": "sum(rate(http_server_request_duration_seconds_count{job=\"sa-p5/api-gateway\"}[5m]))",
 												"legendFormat": "__auto",
 												"range": true
-											}
+											},
+											"version": "v0"
 										},
-										"refId": "A",
-										"hidden": false
+										"refId": "A"
 									}
 								}
 							],
-							"transformations": [],
-							"queryOptions": {}
+							"queryOptions": {},
+							"transformations": []
 						}
 					},
+					"description": "",
+					"id": 1,
+					"links": [],
+					"title": "Traffic",
 					"vizConfig": {
-						"kind": "VizConfig",
 						"group": "stat",
-						"version": "13.2.3",
+						"kind": "VizConfig",
 						"spec": {
+							"fieldConfig": {
+								"defaults": {
+									"color": {
+										"fixedColor": "#ad46ff",
+										"mode": "thresholds"
+									},
+									"thresholds": {
+										"mode": "absolute",
+										"steps": [
+											{
+												"color": "green",
+												"value": 0
+											},
+											{
+												"color": "red",
+												"value": 80
+											}
+										]
+									}
+								},
+								"overrides": []
+							},
 							"options": {
 								"colorMode": "background",
 								"graphMode": "area",
@@ -99,40 +125,15 @@
 								"showPercentChange": false,
 								"textMode": "auto",
 								"wideLayout": true
-							},
-							"fieldConfig": {
-								"defaults": {
-									"thresholds": {
-										"mode": "absolute",
-										"steps": [
-											{
-												"value": 0,
-												"color": "green"
-											},
-											{
-												"value": 80,
-												"color": "red"
-											}
-										]
-									},
-									"color": {
-										"mode": "thresholds",
-										"fixedColor": "#ad46ff"
-									}
-								},
-								"overrides": []
 							}
-						}
+						},
+						"version": "13.2.3"
 					}
 				}
 			},
 			"panel-2": {
 				"kind": "Panel",
 				"spec": {
-					"id": 2,
-					"title": "Error Rate",
-					"description": "",
-					"links": [],
 					"data": {
 						"kind": "QueryGroup",
 						"spec": {
@@ -140,34 +141,55 @@
 								{
 									"kind": "PanelQuery",
 									"spec": {
+										"hidden": false,
 										"query": {
-											"kind": "DataQuery",
-											"group": "prometheus",
-											"version": "v0",
 											"datasource": {
 												"name": "prometheus"
 											},
+											"group": "prometheus",
+											"kind": "DataQuery",
 											"spec": {
 												"editorMode": "code",
 												"expr": "sum(rate(http_server_request_duration_seconds_count{job=\"sa-p5/api-gateway\",http_response_status_code=~\"4..\"}[5m]))\n/\nsum(rate(http_server_request_duration_seconds_count{job=\"sa-p5/api-gateway\"}[5m])) * 100",
 												"legendFormat": "__auto",
 												"range": true
-											}
+											},
+											"version": "v0"
 										},
-										"refId": "A",
-										"hidden": false
+										"refId": "A"
 									}
 								}
 							],
-							"transformations": [],
-							"queryOptions": {}
+							"queryOptions": {},
+							"transformations": []
 						}
 					},
+					"description": "",
+					"id": 2,
+					"links": [],
+					"title": "Error Rate",
 					"vizConfig": {
-						"kind": "VizConfig",
 						"group": "stat",
-						"version": "13.2.3",
+						"kind": "VizConfig",
 						"spec": {
+							"fieldConfig": {
+								"defaults": {
+									"color": {
+										"fixedColor": "#ad46ff",
+										"mode": "thresholds"
+									},
+									"thresholds": {
+										"mode": "absolute",
+										"steps": [
+											{
+												"color": "semi-dark-red",
+												"value": 0
+											}
+										]
+									}
+								},
+								"overrides": []
+							},
 							"options": {
 								"colorMode": "background",
 								"graphMode": "area",
@@ -182,36 +204,15 @@
 								"showPercentChange": false,
 								"textMode": "auto",
 								"wideLayout": true
-							},
-							"fieldConfig": {
-								"defaults": {
-									"thresholds": {
-										"mode": "absolute",
-										"steps": [
-											{
-												"value": 0,
-												"color": "semi-dark-red"
-											}
-										]
-									},
-									"color": {
-										"mode": "thresholds",
-										"fixedColor": "#ad46ff"
-									}
-								},
-								"overrides": []
 							}
-						}
+						},
+						"version": "13.2.3"
 					}
 				}
 			},
 			"panel-3": {
 				"kind": "Panel",
 				"spec": {
-					"id": 3,
-					"title": "Latency",
-					"description": "",
-					"links": [],
 					"data": {
 						"kind": "QueryGroup",
 						"spec": {
@@ -219,34 +220,55 @@
 								{
 									"kind": "PanelQuery",
 									"spec": {
+										"hidden": false,
 										"query": {
-											"kind": "DataQuery",
-											"group": "prometheus",
-											"version": "v0",
 											"datasource": {
 												"name": "prometheus"
 											},
+											"group": "prometheus",
+											"kind": "DataQuery",
 											"spec": {
 												"editorMode": "code",
 												"expr": "histogram_quantile(0.95, sum(rate(http_server_request_duration_seconds_bucket{job=\"sa-p5/api-gateway\"}[5m])) by (le))",
 												"legendFormat": "__auto",
 												"range": true
-											}
+											},
+											"version": "v0"
 										},
-										"refId": "A",
-										"hidden": false
+										"refId": "A"
 									}
 								}
 							],
-							"transformations": [],
-							"queryOptions": {}
+							"queryOptions": {},
+							"transformations": []
 						}
 					},
+					"description": "",
+					"id": 3,
+					"links": [],
+					"title": "Latency",
 					"vizConfig": {
-						"kind": "VizConfig",
 						"group": "stat",
-						"version": "13.2.3",
+						"kind": "VizConfig",
 						"spec": {
+							"fieldConfig": {
+								"defaults": {
+									"color": {
+										"fixedColor": "#ad46ff",
+										"mode": "thresholds"
+									},
+									"thresholds": {
+										"mode": "absolute",
+										"steps": [
+											{
+												"color": "orange",
+												"value": 0
+											}
+										]
+									}
+								},
+								"overrides": []
+							},
 							"options": {
 								"colorMode": "background",
 								"graphMode": "area",
@@ -261,36 +283,15 @@
 								"showPercentChange": false,
 								"textMode": "auto",
 								"wideLayout": true
-							},
-							"fieldConfig": {
-								"defaults": {
-									"thresholds": {
-										"mode": "absolute",
-										"steps": [
-											{
-												"value": 0,
-												"color": "orange"
-											}
-										]
-									},
-									"color": {
-										"mode": "thresholds",
-										"fixedColor": "#ad46ff"
-									}
-								},
-								"overrides": []
 							}
-						}
+						},
+						"version": "13.2.3"
 					}
 				}
 			},
 			"panel-4": {
 				"kind": "Panel",
 				"spec": {
-					"id": 4,
-					"title": "Saturation CPU",
-					"description": "",
-					"links": [],
 					"data": {
 						"kind": "QueryGroup",
 						"spec": {
@@ -298,61 +299,38 @@
 								{
 									"kind": "PanelQuery",
 									"spec": {
+										"hidden": false,
 										"query": {
-											"kind": "DataQuery",
-											"group": "prometheus",
-											"version": "v0",
 											"datasource": {
 												"name": "prometheus"
 											},
+											"group": "prometheus",
+											"kind": "DataQuery",
 											"spec": {
 												"editorMode": "code",
 												"expr": "sum(rate(container_cpu_usage_seconds_total{container=~\"api-gateway|products|interactions|audit-logs|users-identity\"}[5m])) by (container)\n/\nsum(kube_pod_container_resource_limits{container=~\"api-gateway|products|interactions|audit-logs|users-identity\", resource=\"cpu\"})by(container)* 100",
 												"range": true
-											}
+											},
+											"version": "v0"
 										},
-										"refId": "A",
-										"hidden": false
+										"refId": "A"
 									}
 								}
 							],
-							"transformations": [],
-							"queryOptions": {}
+							"queryOptions": {},
+							"transformations": []
 						}
 					},
+					"description": "",
+					"id": 4,
+					"links": [],
+					"title": "Saturation CPU",
 					"vizConfig": {
-						"kind": "VizConfig",
 						"group": "timeseries",
-						"version": "13.2.3",
+						"kind": "VizConfig",
 						"spec": {
-							"options": {
-								"legend": {
-									"calcs": [],
-									"displayMode": "list",
-									"placement": "bottom",
-									"showLegend": true
-								},
-								"tooltip": {
-									"hideZeros": false,
-									"mode": "single",
-									"sort": "none"
-								}
-							},
 							"fieldConfig": {
 								"defaults": {
-									"thresholds": {
-										"mode": "absolute",
-										"steps": [
-											{
-												"value": 0,
-												"color": "green"
-											},
-											{
-												"value": 80,
-												"color": "red"
-											}
-										]
-									},
 									"color": {
 										"mode": "palette-classic"
 									},
@@ -389,21 +367,44 @@
 										"thresholdsStyle": {
 											"mode": "off"
 										}
+									},
+									"thresholds": {
+										"mode": "absolute",
+										"steps": [
+											{
+												"color": "green",
+												"value": 0
+											},
+											{
+												"color": "red",
+												"value": 80
+											}
+										]
 									}
 								},
 								"overrides": []
+							},
+							"options": {
+								"legend": {
+									"calcs": [],
+									"displayMode": "list",
+									"placement": "bottom",
+									"showLegend": true
+								},
+								"tooltip": {
+									"hideZeros": false,
+									"mode": "single",
+									"sort": "none"
+								}
 							}
-						}
+						},
+						"version": "13.2.3"
 					}
 				}
 			},
 			"panel-5": {
 				"kind": "Panel",
 				"spec": {
-					"id": 5,
-					"title": "Saturation RAM",
-					"description": "",
-					"links": [],
 					"data": {
 						"kind": "QueryGroup",
 						"spec": {
@@ -411,61 +412,38 @@
 								{
 									"kind": "PanelQuery",
 									"spec": {
+										"hidden": false,
 										"query": {
-											"kind": "DataQuery",
-											"group": "prometheus",
-											"version": "v0",
 											"datasource": {
 												"name": "prometheus"
 											},
+											"group": "prometheus",
+											"kind": "DataQuery",
 											"spec": {
 												"editorMode": "code",
 												"expr": "sum(container_memory_working_set_bytes{container=~\"api-gateway|users-identity|products|interactions|audit-logs\"}) by (container)\n/\nsum(kube_pod_container_resource_limits{container=~\"api-gateway|users-identity|products|interactions|audit-logs\", resource=\"memory\"}) by (container) * 100",
 												"range": true
-											}
+											},
+											"version": "v0"
 										},
-										"refId": "A",
-										"hidden": false
+										"refId": "A"
 									}
 								}
 							],
-							"transformations": [],
-							"queryOptions": {}
+							"queryOptions": {},
+							"transformations": []
 						}
 					},
+					"description": "",
+					"id": 5,
+					"links": [],
+					"title": "Saturation RAM",
 					"vizConfig": {
-						"kind": "VizConfig",
 						"group": "timeseries",
-						"version": "13.2.3",
+						"kind": "VizConfig",
 						"spec": {
-							"options": {
-								"legend": {
-									"calcs": [],
-									"displayMode": "list",
-									"placement": "bottom",
-									"showLegend": true
-								},
-								"tooltip": {
-									"hideZeros": false,
-									"mode": "single",
-									"sort": "none"
-								}
-							},
 							"fieldConfig": {
 								"defaults": {
-									"thresholds": {
-										"mode": "absolute",
-										"steps": [
-											{
-												"value": 0,
-												"color": "green"
-											},
-											{
-												"value": 80,
-												"color": "red"
-											}
-										]
-									},
 									"color": {
 										"mode": "palette-classic"
 									},
@@ -502,21 +480,44 @@
 										"thresholdsStyle": {
 											"mode": "off"
 										}
+									},
+									"thresholds": {
+										"mode": "absolute",
+										"steps": [
+											{
+												"color": "green",
+												"value": 0
+											},
+											{
+												"color": "red",
+												"value": 80
+											}
+										]
 									}
 								},
 								"overrides": []
+							},
+							"options": {
+								"legend": {
+									"calcs": [],
+									"displayMode": "list",
+									"placement": "bottom",
+									"showLegend": true
+								},
+								"tooltip": {
+									"hideZeros": false,
+									"mode": "single",
+									"sort": "none"
+								}
 							}
-						}
+						},
+						"version": "13.2.3"
 					}
 				}
 			},
 			"panel-6": {
 				"kind": "Panel",
 				"spec": {
-					"id": 6,
-					"title": "Cantidad de Productos Registrados",
-					"description": "",
-					"links": [],
 					"data": {
 						"kind": "QueryGroup",
 						"spec": {
@@ -524,34 +525,59 @@
 								{
 									"kind": "PanelQuery",
 									"spec": {
+										"hidden": false,
 										"query": {
-											"kind": "DataQuery",
-											"group": "prometheus",
-											"version": "v0",
 											"datasource": {
 												"name": "prometheus"
 											},
+											"group": "prometheus",
+											"kind": "DataQuery",
 											"spec": {
 												"editorMode": "code",
-												"expr": "sum(contador_de_ejemplo_total)",
+												"expr": "sum(products_created_total)",
 												"legendFormat": "__auto",
 												"range": true
-											}
+											},
+											"version": "v0"
 										},
-										"refId": "A",
-										"hidden": false
+										"refId": "A"
 									}
 								}
 							],
-							"transformations": [],
-							"queryOptions": {}
+							"queryOptions": {},
+							"transformations": []
 						}
 					},
+					"description": "",
+					"id": 6,
+					"links": [],
+					"title": "Cantidad de Productos Registrados",
 					"vizConfig": {
-						"kind": "VizConfig",
 						"group": "gauge",
-						"version": "13.2.3",
+						"kind": "VizConfig",
 						"spec": {
+							"fieldConfig": {
+								"defaults": {
+									"color": {
+										"fixedColor": "semi-dark-purple",
+										"mode": "fixed"
+									},
+									"thresholds": {
+										"mode": "absolute",
+										"steps": [
+											{
+												"color": "green",
+												"value": 0
+											},
+											{
+												"color": "red",
+												"value": 80
+											}
+										]
+									}
+								},
+								"overrides": []
+							},
 							"options": {
 								"barShape": "rounded",
 								"barWidthFactor": 0.25,
@@ -577,40 +603,15 @@
 								"sizing": "auto",
 								"sparkline": true,
 								"textMode": "auto"
-							},
-							"fieldConfig": {
-								"defaults": {
-									"thresholds": {
-										"mode": "absolute",
-										"steps": [
-											{
-												"value": 0,
-												"color": "green"
-											},
-											{
-												"value": 80,
-												"color": "red"
-											}
-										]
-									},
-									"color": {
-										"mode": "fixed",
-										"fixedColor": "semi-dark-purple"
-									}
-								},
-								"overrides": []
 							}
-						}
+						},
+						"version": "13.2.3"
 					}
 				}
 			},
 			"panel-7": {
 				"kind": "Panel",
 				"spec": {
-					"id": 7,
-					"title": "Cantidad de Usuarios Registrados",
-					"description": "",
-					"links": [],
 					"data": {
 						"kind": "QueryGroup",
 						"spec": {
@@ -618,34 +619,55 @@
 								{
 									"kind": "PanelQuery",
 									"spec": {
+										"hidden": false,
 										"query": {
-											"kind": "DataQuery",
-											"group": "prometheus",
-											"version": "v0",
 											"datasource": {
 												"name": "prometheus"
 											},
+											"group": "prometheus",
+											"kind": "DataQuery",
 											"spec": {
 												"editorMode": "code",
-												"expr": "sum(contador_de_ejemplo_total)",
+												"expr": "sum(users_created_total)",
 												"legendFormat": "__auto",
 												"range": true
-											}
+											},
+											"version": "v0"
 										},
-										"refId": "A",
-										"hidden": false
+										"refId": "A"
 									}
 								}
 							],
-							"transformations": [],
-							"queryOptions": {}
+							"queryOptions": {},
+							"transformations": []
 						}
 					},
+					"description": "",
+					"id": 7,
+					"links": [],
+					"title": "Cantidad de Usuarios Registrados",
 					"vizConfig": {
-						"kind": "VizConfig",
 						"group": "gauge",
-						"version": "13.2.3",
+						"kind": "VizConfig",
 						"spec": {
+							"fieldConfig": {
+								"defaults": {
+									"color": {
+										"fixedColor": "semi-dark-yellow",
+										"mode": "fixed"
+									},
+									"thresholds": {
+										"mode": "absolute",
+										"steps": [
+											{
+												"color": "semi-dark-yellow",
+												"value": 0
+											}
+										]
+									}
+								},
+								"overrides": []
+							},
 							"options": {
 								"barShape": "rounded",
 								"barWidthFactor": 0.25,
@@ -671,36 +693,15 @@
 								"sizing": "auto",
 								"sparkline": true,
 								"textMode": "auto"
-							},
-							"fieldConfig": {
-								"defaults": {
-									"thresholds": {
-										"mode": "absolute",
-										"steps": [
-											{
-												"value": 0,
-												"color": "semi-dark-yellow"
-											}
-										]
-									},
-									"color": {
-										"mode": "fixed",
-										"fixedColor": "semi-dark-yellow"
-									}
-								},
-								"overrides": []
 							}
-						}
+						},
+						"version": "13.2.3"
 					}
 				}
 			},
 			"panel-8": {
 				"kind": "Panel",
 				"spec": {
-					"id": 8,
-					"title": "Cantidad de Interacciones Registradas",
-					"description": "",
-					"links": [],
 					"data": {
 						"kind": "QueryGroup",
 						"spec": {
@@ -708,34 +709,59 @@
 								{
 									"kind": "PanelQuery",
 									"spec": {
+										"hidden": false,
 										"query": {
-											"kind": "DataQuery",
-											"group": "prometheus",
-											"version": "v0",
 											"datasource": {
 												"name": "prometheus"
 											},
+											"group": "prometheus",
+											"kind": "DataQuery",
 											"spec": {
 												"editorMode": "code",
-												"expr": "sum(contador_de_ejemplo_total)",
+												"expr": "sum(reviews_created_total)",
 												"legendFormat": "__auto",
 												"range": true
-											}
+											},
+											"version": "v0"
 										},
-										"refId": "A",
-										"hidden": false
+										"refId": "A"
 									}
 								}
 							],
-							"transformations": [],
-							"queryOptions": {}
+							"queryOptions": {},
+							"transformations": []
 						}
 					},
+					"description": "",
+					"id": 8,
+					"links": [],
+					"title": "Cantidad de Interacciones Registradas",
 					"vizConfig": {
-						"kind": "VizConfig",
 						"group": "gauge",
-						"version": "13.2.3",
+						"kind": "VizConfig",
 						"spec": {
+							"fieldConfig": {
+								"defaults": {
+									"color": {
+										"fixedColor": "blue",
+										"mode": "fixed"
+									},
+									"thresholds": {
+										"mode": "absolute",
+										"steps": [
+											{
+												"color": "green",
+												"value": 0
+											},
+											{
+												"color": "red",
+												"value": 80
+											}
+										]
+									}
+								},
+								"overrides": []
+							},
 							"options": {
 								"barShape": "rounded",
 								"barWidthFactor": 0.25,
@@ -761,40 +787,15 @@
 								"sizing": "auto",
 								"sparkline": true,
 								"textMode": "auto"
-							},
-							"fieldConfig": {
-								"defaults": {
-									"thresholds": {
-										"mode": "absolute",
-										"steps": [
-											{
-												"value": 0,
-												"color": "green"
-											},
-											{
-												"value": 80,
-												"color": "red"
-											}
-										]
-									},
-									"color": {
-										"mode": "fixed",
-										"fixedColor": "blue"
-									}
-								},
-								"overrides": []
 							}
-						}
+						},
+						"version": "13.2.3"
 					}
 				}
 			},
 			"panel-9": {
 				"kind": "Panel",
 				"spec": {
-					"id": 9,
-					"title": "Availability",
-					"description": "",
-					"links": [],
 					"data": {
 						"kind": "QueryGroup",
 						"spec": {
@@ -802,34 +803,62 @@
 								{
 									"kind": "PanelQuery",
 									"spec": {
+										"hidden": false,
 										"query": {
-											"kind": "DataQuery",
-											"group": "prometheus",
-											"version": "v0",
 											"datasource": {
 												"name": "prometheus"
 											},
+											"group": "prometheus",
+											"kind": "DataQuery",
 											"spec": {
 												"editorMode": "code",
 												"expr": "(1-sum(rate(http_server_request_duration_seconds_count{job=\"sa-p5/api-gateway\",http_response_status_code=~\"4..\"}[5m]))\n/\nsum(rate(http_server_request_duration_seconds_count{job=\"sa-p5/api-gateway\"}[5m]))) * 100",
 												"legendFormat": "__auto",
 												"range": true
-											}
+											},
+											"version": "v0"
 										},
-										"refId": "A",
-										"hidden": false
+										"refId": "A"
 									}
 								}
 							],
-							"transformations": [],
-							"queryOptions": {}
+							"queryOptions": {},
+							"transformations": []
 						}
 					},
+					"description": "",
+					"id": 9,
+					"links": [],
+					"title": "Availability",
 					"vizConfig": {
-						"kind": "VizConfig",
 						"group": "bargauge",
-						"version": "13.2.3",
+						"kind": "VizConfig",
 						"spec": {
+							"fieldConfig": {
+								"defaults": {
+									"color": {
+										"mode": "continuous-plasma"
+									},
+									"thresholds": {
+										"mode": "percentage",
+										"steps": [
+											{
+												"color": "green",
+												"value": 0
+											},
+											{
+												"color": "orange",
+												"value": 60
+											},
+											{
+												"color": "red",
+												"value": 80
+											}
+										]
+									}
+								},
+								"overrides": []
+							},
 							"options": {
 								"displayMode": "lcd",
 								"legend": {
@@ -851,33 +880,9 @@
 								"showUnfilled": true,
 								"sizing": "auto",
 								"valueMode": "text"
-							},
-							"fieldConfig": {
-								"defaults": {
-									"thresholds": {
-										"mode": "percentage",
-										"steps": [
-											{
-												"value": 0,
-												"color": "green"
-											},
-											{
-												"value": 60,
-												"color": "orange"
-											},
-											{
-												"value": 80,
-												"color": "red"
-											}
-										]
-									},
-									"color": {
-										"mode": "continuous-plasma"
-									}
-								},
-								"overrides": []
 							}
-						}
+						},
+						"version": "13.2.3"
 					}
 				}
 			}
@@ -889,118 +894,118 @@
 					{
 						"kind": "GridLayoutItem",
 						"spec": {
-							"x": 0,
-							"y": 0,
-							"width": 8,
-							"height": 7,
 							"element": {
 								"kind": "ElementReference",
 								"name": "panel-1"
-							}
+							},
+							"height": 7,
+							"width": 8,
+							"x": 0,
+							"y": 0
 						}
 					},
 					{
 						"kind": "GridLayoutItem",
 						"spec": {
-							"x": 8,
-							"y": 0,
-							"width": 8,
-							"height": 7,
 							"element": {
 								"kind": "ElementReference",
 								"name": "panel-2"
-							}
+							},
+							"height": 7,
+							"width": 8,
+							"x": 8,
+							"y": 0
 						}
 					},
 					{
 						"kind": "GridLayoutItem",
 						"spec": {
-							"x": 16,
-							"y": 0,
-							"width": 8,
-							"height": 7,
 							"element": {
 								"kind": "ElementReference",
 								"name": "panel-3"
-							}
+							},
+							"height": 7,
+							"width": 8,
+							"x": 16,
+							"y": 0
 						}
 					},
 					{
 						"kind": "GridLayoutItem",
 						"spec": {
-							"x": 0,
-							"y": 7,
-							"width": 12,
-							"height": 10,
 							"element": {
 								"kind": "ElementReference",
 								"name": "panel-4"
-							}
+							},
+							"height": 10,
+							"width": 12,
+							"x": 0,
+							"y": 7
 						}
 					},
 					{
 						"kind": "GridLayoutItem",
 						"spec": {
-							"x": 12,
-							"y": 7,
-							"width": 12,
-							"height": 10,
 							"element": {
 								"kind": "ElementReference",
 								"name": "panel-5"
-							}
+							},
+							"height": 10,
+							"width": 12,
+							"x": 12,
+							"y": 7
 						}
 					},
 					{
 						"kind": "GridLayoutItem",
 						"spec": {
-							"x": 0,
-							"y": 17,
-							"width": 12,
-							"height": 7,
 							"element": {
 								"kind": "ElementReference",
 								"name": "panel-9"
-							}
+							},
+							"height": 7,
+							"width": 12,
+							"x": 0,
+							"y": 17
 						}
 					},
 					{
 						"kind": "GridLayoutItem",
 						"spec": {
-							"x": 12,
-							"y": 17,
-							"width": 4,
-							"height": 7,
 							"element": {
 								"kind": "ElementReference",
 								"name": "panel-6"
-							}
+							},
+							"height": 7,
+							"width": 4,
+							"x": 12,
+							"y": 17
 						}
 					},
 					{
 						"kind": "GridLayoutItem",
 						"spec": {
-							"x": 16,
-							"y": 17,
-							"width": 4,
-							"height": 7,
 							"element": {
 								"kind": "ElementReference",
 								"name": "panel-7"
-							}
+							},
+							"height": 7,
+							"width": 4,
+							"x": 16,
+							"y": 17
 						}
 					},
 					{
 						"kind": "GridLayoutItem",
 						"spec": {
-							"x": 20,
-							"y": 17,
-							"width": 4,
-							"height": 7,
 							"element": {
 								"kind": "ElementReference",
 								"name": "panel-8"
-							}
+							},
+							"height": 7,
+							"width": 4,
+							"x": 20,
+							"y": 17
 						}
 					}
 				]
@@ -1008,12 +1013,17 @@
 		},
 		"links": [],
 		"liveNow": false,
+		"preferences": {
+			"layout": {
+				"kind": "GridLayout",
+				"spec": {
+					"items": []
+				}
+			}
+		},
 		"preload": false,
 		"tags": [],
 		"timeSettings": {
-			"timezone": "browser",
-			"from": "now-6h",
-			"to": "now",
 			"autoRefresh": "",
 			"autoRefreshIntervals": [
 				"5s",
@@ -1027,18 +1037,13 @@
 				"2h",
 				"1d"
 			],
+			"fiscalYearStartMonth": 0,
+			"from": "now-6h",
 			"hideTimepicker": false,
-			"fiscalYearStartMonth": 0
+			"timezone": "browser",
+			"to": "now"
 		},
 		"title": "Main",
-		"variables": [],
-		"preferences": {
-			"layout": {
-				"kind": "GridLayout",
-				"spec": {
-					"items": []
-				}
-			}
-		}
+		"variables": []
 	}
 }

@@ -1,0 +1,14 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: resend-smtp
+  namespace: observability
+spec:
+  encryptedData:
+    api-key: AgBXM8kvIgUJNfuq6HTdC97dGx+yS8F4y3UG+Ey6Yr5X5XcjfJoUOp7cyGzcpWyi3ME3ZUDm+ML5WF4Jx8MdkvyL+pY2FiieOgwDF25oNHesuLT3nOoKXGAeiqM3E6HlwQrit7SuWIMbdA0me8/3Xi2lY2COiGLQqAYLA3I1rzqmAio3xegyUZAGB1PKtsitF33v2sDycbZigQTwf39jcMM85611krPLTwNylEQN4dCB9QO1GIeT8PQSZGLPBWW0PSgqgRZnE2VCoDPBk3zYG0rutenFtTKCo8LcJvFxnsGuGJTWuimZAwmp3yYwK/pC8DDWZWkq99ckeM7YV8h357UAry2eR6gsd6AEMg3uh2ZsNUenVoI8saSSEV4s+3H2gJDO2rcyBjTOPc6Ahhy9mmTIfS4an+00nIWfuILD12M5EyUw+dxXqfNZg/v2a8TL6b2LjxHEjqePDGZgt/mXkDOSpc+GtbA9pAvyYg/8GcqsdAXnUZXkKauuDp523B7KkbKBwveeCxMtTPQx4DRyF9mkZYwdsH53Xskg1EAAqEysvLasD7At3CFx/5U6Wl6QTIPKXNdVZLEySOx42tqFmzR/tQIFfu8TXhv2G4n6KNW2sMk17BgUk6hJuw+lmCHXwpqSXaD3gBWv8QNK7mVW7mEaMoOCkua1dhIwUfva2TQjF1CCnBS44F3ekhzvn/wrwmYxTE0XmWKPCeFoC4jmActZnF8p240T0IzKsTOScbYl0yMyIxc=
+  template:
+    metadata:
+      name: resend-smtp
+      namespace: observability
+    type: Opaque
