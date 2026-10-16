@@ -44,7 +44,7 @@ spec:
           config:
             global:
               smtp_smarthost: "smtp.resend.com:587"
-              smtp_from: "alertas@tudominio.com"
+              smtp_from: "alertas@pitagoricos.tech"
               smtp_auth_username: "resend"
               smtp_auth_password_file: /etc/secrets/resend/api-key
               smtp_require_tls: true
@@ -74,6 +74,7 @@ spec:
                       description: "{{ $labels.instance }} lleva más de 2 minutos sin responder."
 
                   - alert: Presupuesto de Error de Latencia
+                    #expr: (1 - (sum(rate(http_server_request_duration_seconds_bucket{le="1.0", job="sa-p5/api-gateway"}[1h]))/sum(rate(http_server_request_duration_seconds_count{job="sa-p5/api-gateway"}[1h]))))> (14.4 * (1 - 0.99))
                     expr: (sum(increase(contador_de_ejemplo_total[5m])) > 10)
                     for: 2m
                     labels:
