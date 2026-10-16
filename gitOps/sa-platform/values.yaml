@@ -295,7 +295,7 @@ products:
   revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/products
-    tag: *tag_val
+    tag: v1.10.0
   logLevel: info
   resources:
     requests:
@@ -307,6 +307,11 @@ products:
   autoscaling:
     minReplicas: 2
     maxReplicas: 3
+  env:
+    NODE_ENV: "prod"
+    APP_VERSION: *tag_val
+    SERVICE_NAME: "products"
+    OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector-gateway.observability.svc.cluster.local:4317"
   db:
     uri: "AgAKxIWqk4mINUkD1cSS0QP6D6XApLDf4Gp9r4e+L+S23zaDzP8YzHXlknEakPB3RWABIj5G4tePGykkU2EqV47VyHg8oo8JFtVOI3Q6f4raVRLDa/TRNie7PrwDiRLk0VelGDKPdvoMT4RUnpHCKVP8MkCOKCLM5kQC7lOp/JdCgnfDIXB+oVRZI2JbOaVsXMDKpBB2XjRAWlK+Zg3Cdb6L0swlGLYiJbxbdjHCvui4zbj1CYqZDLLKpN5b5P/hPInJtiTJEBwAuWyrxyDIrivvrz/EmuqTjGlSeEAExpw+1Jg2YP5miJzVexhxYOG1kouYm0jmWKMHl5ZDo+uBEkm+GGD31fRUfvRNQFZ0q/bA2V9VC5u3YD7EJrv1AYZ1aiHNyHcE64g37cjFEJG3RQ2zI5nvMvvzGoBzcFrTgfWkyoGOUlJRf2kOTECdrhH2QF4wOm80o/50Pc/1Zw5Tr1nqaB3t2P9EsqCn8Mlq5hgiSttMP3KBTDNj/NcZRFQ7UCdqSVbpyEZtvwCGeRJehUxqFRbBa1+RNvMOhUlMrb73193ePtOJkRp9lToj0uUXRVCixy/EE1tT5N6NrDp3EdU038ORdDRXj9OHGewnHXZCH/EpMxSFwTghvN8uxgtp3mt3Hzgf1fp8cQQ3nOpC0DpKEC0911gi5IOM1U8zVFfUDFg+hV90f6nn/2lHJ3U0sF04X74IrSB6ZdJdmvFJEKNu7279jMOfBzF1RdM4D6ChF2z2oguE3feiNPg8USCJz5hBSK9XU8ww9vdebp2yHN/LNOmwS4RsWk0JNxE9K229A85Irl6tj3eVfVL9faJRu2+TjbDzyKFuHpNP"
     port: 27017
@@ -316,7 +321,7 @@ interactions:
   revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/interactions
-    tag: *tag_val
+    tag: v1.10.0
   logLevel: info
   resources:
     requests:
@@ -328,7 +333,11 @@ interactions:
   autoscaling:
     minReplicas: 2
     maxReplicas: 3
-
+  env:
+    NODE_ENV: "prod"
+    APP_VERSION: *tag_val
+    SERVICE_NAME: "interactions"
+    OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector-gateway.observability.svc.cluster.local:4317"
   db:
     uri: "AgBKiXF09dEwW8ZpAIANlIM0s3PdNk5s2snbm0xxNu6MCdTfDyLwM8I8GRjKukrfEGiiUcEFZGZVsu2WHtEyaWXBFdhsaXjG5OBqLTv5Kp2RNbmMrS0YR2F/x5ocr177Eem3YAPdWHR2YtPVfIHif1y2xICHMgEy8RMygFI9bAjCTkiASU9efwU019cMCPV7xfEQ+VfgTF1cLH6J+7g+5MyOCGGr9BCfSdR0NUjYE9l39u7djd0KpuBRbJULbbEJWsLmv64h60r1V5cT7H2pY/Q31K6do38SJESPxWYtI6+W+WchKpe0JgMxgxryec1OLKBgFeaxh+DgynqXk5qZdb3a9rVBnLnrCosFLjV9peTKXDpBYQzVky+EeQ1Wbn1Sh7BXGngk+BAh6Gq2n+RgsSKprdzNHAvReRijNYkcvyE4PzXlm/jsO55QKwgegCZh21LfZijFNDCCDpFbQ575R8FM1LlbICjaER1xGNq+HTDXwr23HWM/7QKK2hqZ4WFK7oh5MZezUcptqexvx8kDhvKe6jFaMrQT/0+R5L2hGREH747yTph+/w1HH0KlcwEERZoVMshxkxuukPI9OCOV4UYUwDkt3RfvdXNV+NI3Gesq7Sov8hFAO3877y7m8OB3qDZBMCRSNgAqC5fX2l00spI5X5cibxgmPQ32niw4XDLfomx9v7byffcoi0T0T9ap8JqVdDmTOshskiJKOJZWf+mHJ6zOqiz7Ik+bJPL5Br3Z7mRKSOTQTO5ZKSp67EjirYydSIHrRjP1AvjbL3/MAfl9hwJrRlkGAm5DLEHo2D+CbAtEmfQrbTO35IY/2DMQv5+UIuFeCv+ILS2cAROmQr2+oI0="
     port: 27017
