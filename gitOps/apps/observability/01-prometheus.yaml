@@ -83,7 +83,7 @@ spec:
                       description: "{{ $labels.instance }} lleva más de 2 minutos con latencia alta."
 
                   - alert: Alerta de prueba
-                    expr:
+                    expr: (sum(increase(contador_de_ejemplo_total[5m])) > 10)
                     for: 1m
                     labels:
                       severity: warning
