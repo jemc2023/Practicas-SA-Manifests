@@ -11,7 +11,7 @@ image:
   pullPolicy: IfNotPresent
 
 port: 8080
-healthPath: /health
+healthPath: /api/health
 logLevel: info
 
 resources:
