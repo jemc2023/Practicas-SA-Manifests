@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: api-gateway-metrics-analysis
+  namespace: {{ .Values.global.namespace }}
+spec:
+  args:
+    - name: service-name
+      value: {{ .Chart.Name }}
+  metrics:
+    - name: error-rate
+      interval: 30s # Ejecutar la consulta cada 30 segundos
+      successCondition: result[0] <= 0.05 # Máximo 5% de error permitido (0.05)
+      failureLimit: 3 # Si falla 3 veces consecutivas, hace ROLLBACK
+      provider:
+        prometheus:
+          address: http://prometheus-server.observability.svc.cluster.local:80
+          query: |
+            sum(rate(http_server_request_duration_seconds_count{job="sa-p5/api-gateway",http_response_status_code=~"4.."}[5m]))
+            /
+            sum(rate(http_server_request_duration_seconds_count{job="sa-p5/api-gateway"}[5m])) * 100
+
+    - name: latency-p95
+      interval: 30s
+      successCondition: result[0] <= 1.0 # Latencia P95 <= 1.0 segundo
+      failureLimit: 3
+      provider:
+        prometheus:
+          address: http://prometheus-server.observability.svc.cluster.local:80
+          query: |
+            histogram_quantile(0.95, sum(rate(http_server_request_duration_seconds_bucket{job="sa-p5/api-gateway"}[5m])) by (le))
