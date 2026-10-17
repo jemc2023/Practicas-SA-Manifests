@@ -82,14 +82,14 @@ spec:
                       summary: "El presupuesto de error de latencia ha sido excedido: {{ $labels.job }}"
                       description: "{{ $labels.instance }} lleva más de 2 minutos con latencia alta."
 
-                  - alert: Alerta de prueba
-                    expr: (sum(increase(contador_de_ejemplo_total[5m])) > 10)
-                    for: 1m
-                    labels:
-                      severity: warning
-                    annotations:
-                      summary: "Alerta de prueba: {{ $labels.job }}"
-                      description: "{{ $labels.instance }} lleva más de 1 minuto con un problema."
+                  # - alert: Alerta de prueba
+                  #   expr: (sum(increase(contador_de_ejemplo_total[5m])) > 10)
+                  #   for: 1m
+                  #   labels:
+                  #     severity: warning
+                  #   annotations:
+                  #     summary: "Alerta de prueba: {{ $labels.job }}"
+                  #     description: "{{ $labels.instance }} lleva más de 1 minuto con un problema."
         prometheus-pushgateway:
           enabled: false
         prometheus-node-exporter:
