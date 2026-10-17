@@ -242,7 +242,7 @@ users-identity:
   revisionHistoryLimit: 1
   image:
     repository: ghcr.io/jemc2023/users-identity
-    tag: v1.10.0
+    tag: v1.10.5
   logLevel: info
   resources:
     requests:
